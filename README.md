@@ -11,5 +11,4 @@ A WDD Team project where we create a webpage for artisans and handcrafters to sh
 
 . Reviews and Ratings: Any user can leave a rating for the product and a written review.
 
-Helamã Barbour
-Olakunle Obademi
+By Helamã Barbour & Olakunle Obademi

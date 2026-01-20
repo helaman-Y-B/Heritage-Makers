@@ -1,6 +1,7 @@
 /* ================================
    Heritage Makers – Global Styles
    ================================ */
+@import "../styles/tokens.css";   
 
 /* Design Tokens */
 :root {

@@ -1,42 +1,69 @@
+/* ================================
+   Heritage Makers – Global Styles
+   ================================ */
+
+/* Design Tokens */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Heritage-makers's Color Palette */
+  --hm-gray-100: #e5e5e5;
+  --hm-gray-200: #d3d3d3;
+  --hm-gray-300: #c2c2c2;
+  --hm-accent-500: #857c96;
+  --hm-accent-700: #4d4861;
+
+  /* Semantic Tokens */
+  --bg: #ffffff;
+  --text: #111111;
+  --muted: #555555;
+
+  --surface: var(--hm-gray-100);
+  --border: var(--hm-gray-300);
+
+  --primary: var(--hm-accent-700);
+  --primary-soft: var(--hm-accent-500);
+
+  /* Fonts (provided by next/font in layout.tsx) */
+  --font-body: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --font-heading: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Reset / Base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  height: 100%;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
   margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.6;
 }
 
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+  margin-top: 0;
+}
+
+p {
+  margin-top: 0;
+}
+
+/* Links */
 a {
   color: inherit;
   text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
 }

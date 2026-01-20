@@ -1,18 +1,23 @@
+:root {
+  /* Colors */
+  --hm-gray-100: #f1f1f1;
+  --hm-gray-200: #e0e0e0;
+  --hm-gray-300: #cfcfcf;
 
-  /* Heritage Makers palette (Helama) */
-  --hm-gray-100: #e5e5e5;
-  --hm-gray-200: #d3d3d3;
-  --hm-gray-300: #c2c2c2;
   --hm-accent-500: #857c96;
   --hm-accent-700: #4d4861;
 
-  /* Semantic tokens */
-  --bg: #ffffff;
-  --text: #171717;
-  --muted: #555555;
-  --surface: #f4f4f4;
-  --border: rgba(0, 0, 0, 0.12);
+  --hm-text: #1f1f1f;
+  --hm-muted: #6b6b6b;
+  --hm-border: #d6d6d6;
 
   /* Layout */
   --container: 1100px;
   --radius: 12px;
+
+  /* Typography */
+  --hm-font-body: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+
+  --hm-font-heading: var(--hm-font-body);
+}

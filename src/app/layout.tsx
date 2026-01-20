@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
 import { Nunito_Sans, Chivo } from "next/font/google";
 import "./globals.css";
 
@@ -26,7 +28,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${nunito.variable} ${chivo.variable}`}>
-      <body>{children}</body>
+      <body>
+  <Header />
+  {children}
+  <Footer />
+</body>
     </html>
   );
 }

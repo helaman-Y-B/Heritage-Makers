@@ -1,0 +1,70 @@
+/* ================================
+   Heritage Makers – Global Styles
+   ================================ */
+@import "../styles/tokens.css";   
+
+/* Design Tokens */
+:root {
+  /* Heritage-makers's Color Palette */
+  --hm-gray-100: #e5e5e5;
+  --hm-gray-200: #d3d3d3;
+  --hm-gray-300: #c2c2c2;
+  --hm-accent-500: #857c96;
+  --hm-accent-700: #4d4861;
+
+  /* Semantic Tokens */
+  --bg: #ffffff;
+  --text: #111111;
+  --muted: #555555;
+
+  --surface: var(--hm-gray-100);
+  --border: var(--hm-gray-300);
+
+  --primary: var(--hm-accent-700);
+  --primary-soft: var(--hm-accent-500);
+
+  /* Fonts (provided by next/font in layout.tsx) */
+  --font-body: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --font-heading: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* Reset / Base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+  margin-top: 0;
+}
+
+p {
+  margin-top: 0;
+}
+
+/* Links */
+a {
+  color: inherit;
+  text-decoration: none;
+}

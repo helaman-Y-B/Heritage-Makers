@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Container from "./Container";
+import Navigation from "./Navigation";
 
 export default function Header() {
   return (
@@ -31,11 +32,7 @@ export default function Header() {
             Heritage Makers
           </Link>
 
-          <nav style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-            <Link href="/products">Products</Link>
-            <Link href="/about">About</Link>
-            <Link href="/contact">Contact</Link>
-          </nav>
+          <Navigation />
         </div>
       </Container>
     </header>

@@ -63,17 +63,13 @@ p {
   margin-top: 0;
 }
 
-#nav-arrow {
-  display: none;
-}
-
 /* Links */
 a {
   color: inherit;
   text-decoration: none;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 520px) {
   header div div {
     flex-direction: column;
   }
@@ -105,4 +101,11 @@ a {
   .openNav .nav-content {
     display: block;
   }
+}
+
+@media screen and (min-size:521px) {
+  #nav-arrow {
+    display: none;
+  }
+  
 }

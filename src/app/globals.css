@@ -69,6 +69,7 @@ a {
   text-decoration: none;
 }
 
+/* When screen is smaller then 520px wide */
 @media screen and (max-width: 520px) {
   header div div {
     flex-direction: column;

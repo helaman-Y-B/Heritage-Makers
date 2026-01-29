@@ -1,0 +1,74 @@
+.wrap {
+  padding: 1.5rem 0 2.25rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.back {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 1.25rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.heroRow {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 1rem;
+}
+
+.thumb {
+  height: 200px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--surface), #fff);
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 700px) {
+  .heroRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.title {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.muted {
+  margin: 0;
+  color: var(--muted);
+}
+
+.price {
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.button {
+  border: 1px solid var(--border);
+  background: var(--primary);
+  color: #fff;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.secondary {
+  background: transparent;
+  color: var(--text);
+}

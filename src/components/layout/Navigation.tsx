@@ -41,7 +41,7 @@ export default function Navigation() {
                 <Image id="nav-arrow" className={isOpen ? "rotated" : ""} src={navIcon} alt="Menu Icon" width={40} height={40} />
             ) : (null)}
             <Link className="nav-content" href="/products">Products</Link>
-            <Link href="/about" className="nav-content">About</Link>
+            <Link href="/aboutUs" className="nav-content">About</Link>
             <Link href="/contact" className="nav-content">Contact</Link>
         </nav>
         </>

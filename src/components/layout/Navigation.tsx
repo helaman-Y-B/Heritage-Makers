@@ -4,20 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import navIcon from "@/app/nav-icon.png";
+import { useWindowSize } from '@/hooks/useWindowSize';
 
 export default function Navigation() {
 
     // State to track window size
-    const [isSizeSmall, setIsSizeSmall] = useState(false);
-    
-    // Function to check window size
-    function checkSize() {
-        if (window.innerWidth <= 520) {
-            setIsSizeSmall(true);
-        } else {
-            setIsSizeSmall(false);
-        }
-    }
+    const isSizeSmall = useWindowSize(520);
 
     // State to handle nav open/close
     const [isOpen, setIsOpen] = useState(false);
@@ -25,13 +17,6 @@ export default function Navigation() {
     const handleNav = () => {
         setIsOpen(!isOpen);
     }
-
-    useEffect(() => {
-        checkSize(); // Initial check
-        window.addEventListener('resize', checkSize); // Add event to listen for window resize and execute checkSize
-        return () => window.removeEventListener('resize', checkSize); // Remove the event after the check is done
-        // The empty array ensures that this code runs only once when the component appear on the screen
-    }, []);
 
     return (
         <>

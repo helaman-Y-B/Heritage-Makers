@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Container from "@/components/layout/Container";
 import { formatPrice, getProductById } from "@/lib/products";
+import { getCurrentUser } from "@/lib/auth/session";
+import { hasPermission } from "@/lib/auth/roles";
 import styles from "./details.module.css";
 
 type Props = {
@@ -10,6 +12,7 @@ type Props = {
 export default async function ProductDetailsPage({ params }: Props) {
   const { id } = await params;
   const product = getProductById(id);
+  const currentUser = await getCurrentUser();
 
   if (!product) {
     return (
@@ -39,7 +42,12 @@ export default async function ProductDetailsPage({ params }: Props) {
 
         <article className={styles.panel}>
           <div className={styles.heroRow}>
-            <div className={styles.thumb} aria-hidden="true" />
+            <img
+              className={styles.thumb}
+              src={product.image}
+              alt={product.name}
+              loading="lazy"
+            />
 
             <div>
               <h1 className={styles.title}>{product.name}</h1>
@@ -55,6 +63,13 @@ export default async function ProductDetailsPage({ params }: Props) {
 
               <p className={styles.price}>{formatPrice(product.price)}</p>
 
+              <p className={styles.muted}>
+                Current role: <strong>{currentUser.role}</strong> â€¢{" "}
+                <Link className={styles.back} href="/dev/role">
+                  Change role
+                </Link>
+              </p>
+
               <div className={styles.buttonRow}>
                 <button className={styles.button} disabled={!product.inStock}>
                   {product.inStock ? "Add to cart (Week 5)" : "Out of stock"}
@@ -62,6 +77,11 @@ export default async function ProductDetailsPage({ params }: Props) {
                 <button className={`${styles.button} ${styles.secondary}`}>
                   Save (Week 6)
                 </button>
+                {hasPermission(currentUser.role, "manage_products") && (
+                  <button className={`${styles.button} ${styles.secondary}`}>
+                    Edit product (Admin)
+                  </button>
+                )}
               </div>
             </div>
           </div>

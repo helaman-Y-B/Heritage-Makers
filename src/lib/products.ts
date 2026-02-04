@@ -7,6 +7,7 @@ export const products: Product[] = [
     name: "Ankara Heritage Tote Bag",
     maker: "Ayo Textiles",
     price: 28,
+    image: "https://upload.wikimedia.org/wikipedia/commons/9/9a/Tote_bag.jpg",
     category: "Textiles",
     rating: 4.7,
     reviewsCount: 58,
@@ -20,6 +21,8 @@ export const products: Product[] = [
     name: "Carved Wooden Bowl",
     maker: "Olu Woodcraft",
     price: 34,
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/c/c6/Bowl_made_of_Ambrosia_Maple%2C_turned_on_wood_lathe.jpg",
     category: "Woodwork",
     rating: 4.6,
     reviewsCount: 41,
@@ -33,6 +36,8 @@ export const products: Product[] = [
     name: "Clay Mug Set (2pcs)",
     maker: "Heritage Ceramics",
     price: 22,
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/e/e1/Ceramic_mug_antisky_ceramic.jpg",
     category: "Ceramics",
     rating: 4.5,
     reviewsCount: 29,
@@ -46,6 +51,7 @@ export const products: Product[] = [
     name: "Beaded Bracelet",
     maker: "Kemi Jewelry",
     price: 12,
+    image: "https://upload.wikimedia.org/wikipedia/commons/4/43/Rose_Quartz_Bracelet.jpg",
     category: "Jewelry",
     rating: 4.4,
     reviewsCount: 17,
@@ -59,6 +65,8 @@ export const products: Product[] = [
     name: "Heritage Wall Art Print",
     maker: "Zion Studio",
     price: 18,
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/0/06/%C3%89mile_Hurtr%C3%A9%2C_Design_for_a_Wall_Decoration%2C_1896-1898.jpg",
     category: "Art",
     rating: 4.8,
     reviewsCount: 73,

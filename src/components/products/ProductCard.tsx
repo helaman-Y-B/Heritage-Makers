@@ -10,8 +10,12 @@ type Props = {
 export default function ProductCard({ product }: Props) {
   return (
     <article className={styles.card}>
-      {/* Week 4: placeholder “image” block (we’ll add real images later) */}
-      <div className={styles.thumb} aria-hidden="true" />
+      <img
+        className={styles.thumb}
+        src={product.image}
+        alt={product.name}
+        loading="lazy"
+      />
 
       <div className={styles.meta}>
         <div className={styles.nameRow}>

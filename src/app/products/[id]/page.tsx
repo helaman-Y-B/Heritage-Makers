@@ -39,7 +39,12 @@ export default async function ProductDetailsPage({ params }: Props) {
 
         <article className={styles.panel}>
           <div className={styles.heroRow}>
-            <div className={styles.thumb} aria-hidden="true" />
+            <img
+              className={styles.thumb}
+              src={product.image}
+              alt={product.name}
+              loading="lazy"
+            />
 
             <div>
               <h1 className={styles.title}>{product.name}</h1>

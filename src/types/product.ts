@@ -4,6 +4,7 @@ export type Product = {
   name: string;
   maker: string;
   price: number;       // store as number; format later
+  image: string;
   category: "Textiles" | "Woodwork" | "Ceramics" | "Jewelry" | "Art";
   rating: number;      // 0 - 5
   reviewsCount: number;

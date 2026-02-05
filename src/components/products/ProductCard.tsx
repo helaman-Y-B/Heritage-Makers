@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import styles from "./ProductCard.module.css";
 import { Product } from "@/types/product";
@@ -5,13 +6,21 @@ import { formatPrice } from "@/lib/products";
 
 type Props = {
   product: Product;
+  canCreateOrder: boolean;
 };
 
-export default function ProductCard({ product }: Props) {
+export default function ProductCard({ product, canCreateOrder }: Props) {
   return (
     <article className={styles.card}>
-      {/* Week 4: placeholder “image” block (we’ll add real images later) */}
-      <div className={styles.thumb} aria-hidden="true" />
+      <div className={styles.thumb}>
+        <Image
+          src={product.imageUrl}
+          alt={product.imageAlt}
+          fill
+          sizes="(max-width: 520px) 100vw, (max-width: 900px) 50vw, 33vw"
+          className={styles.image}
+        />
+      </div>
 
       <div className={styles.meta}>
         <div className={styles.nameRow}>
@@ -24,7 +33,7 @@ export default function ProductCard({ product }: Props) {
         </p>
 
         <p className={styles.muted}>
-          ⭐ {product.rating} ({product.reviewsCount})
+          ★ {product.rating} ({product.reviewsCount})
           {!product.inStock && " • Out of stock"}
         </p>
 
@@ -34,6 +43,14 @@ export default function ProductCard({ product }: Props) {
             View details →
           </Link>
         </div>
+
+        {canCreateOrder ? (
+          <button className={styles.actionButton} type="button">
+            Add to order
+          </button>
+        ) : (
+          <p className={styles.restricted}>Buyers can place orders</p>
+        )}
       </div>
     </article>
   );

@@ -35,6 +35,44 @@
   border-color: rgba(255, 255, 255, 0.35);
 }
 
+.roleGroup {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.roleLegend {
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0 6px;
+}
+
+.roleOptions {
+  display: grid;
+  gap: 8px;
+}
+
+.roleOption {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 10px;
+  row-gap: 2px;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.roleOption input {
+  margin-top: 2px;
+}
+
+.roleHint {
+  grid-column: 2;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
 .checkbox {
   display: inline-flex;
   align-items: center;
@@ -66,4 +104,10 @@
 .link {
   text-decoration: underline;
   opacity: 0.9;
+}
+
+.inlineLink {
+  text-decoration: underline;
+  color: inherit;
+  font-weight: 600;
 }

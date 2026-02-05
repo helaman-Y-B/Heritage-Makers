@@ -2,7 +2,25 @@
 export type Role = "admin" | "seller" | "buyer";
 
 export const ROLE_PERMISSIONS = {
-  admin: ["manage_products", "manage_users", "view_orders"],
-  seller: ["manage_own_products", "view_own_orders"],
-  buyer: ["browse_products", "create_order"],
+  admin: [
+    "manage_products",
+    "manage_users",
+    "view_orders",
+    "approve_makers",
+    "manage_categories",
+    "view_reports",
+  ],
+  seller: [
+    "manage_own_products",
+    "view_own_orders",
+    "edit_own_profile",
+    "view_earnings",
+  ],
+  buyer: [
+    "browse_products",
+    "create_order",
+    "manage_own_profile",
+    "leave_review",
+    "save_favorites",
+  ],
 } as const;

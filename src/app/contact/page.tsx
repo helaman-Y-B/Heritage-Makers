@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import styles from "./page.module.css";
 
 export default function ContactPage() {
   const [form, setForm] = useState({
@@ -20,13 +21,11 @@ export default function ContactPage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    // Validación mínima
     if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
       setStatus("error");
       return;
     }
 
-    // Sin backend: solo simulamos envío
     setStatus("sending");
     setTimeout(() => {
       setStatus("sent");
@@ -35,144 +34,119 @@ export default function ContactPage() {
   }
 
   return (
-    <main style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
-      <h1 style={{ fontSize: 48, marginBottom: 8 }}>Contact</h1>
-      <p style={{ color: "#555", marginBottom: 24 }}>
-        Questions, feedback, or partnership ideas? Send us a message and we’ll get back to you.
-      </p>
+    <main className={styles.page}>
+      <section className={styles.hero}>
+        <p className={styles.kicker}>Contact Heritage Makers</p>
+        <h1 className={styles.title}>Let&apos;s talk about your ideas.</h1>
+        <p className={styles.subtitle}>
+          Whether you have a question about an order, want to partner with us, or are
+          interested in becoming a maker, we&apos;re here to help.
+        </p>
+      </section>
 
-      <section
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr",
-          gap: 24,
-        }}
-      >
-        <form
-          onSubmit={handleSubmit}
-          style={{
-            border: "1px solid #e5e5e5",
-            borderRadius: 16,
-            padding: 24,
-            background: "#fff",
-          }}
-        >
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-            <div>
-              <label style={{ display: "block", marginBottom: 6 }}>Name *</label>
+      <section className={styles.grid}>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <div className={styles.formHeader}>
+            <h2 className={styles.formTitle}>Send a message</h2>
+            <p className={styles.formSubtitle}>
+              We typically respond within 1-2 business days.
+            </p>
+          </div>
+
+          <div className={styles.columns}>
+            <label className={styles.label}>
+              Name
               <input
                 name="name"
                 value={form.name}
                 onChange={handleChange}
-                placeholder="Your name"
-                style={inputStyle}
+                placeholder="Your full name"
+                className={styles.input}
+                required
               />
-            </div>
-
-            <div>
-              <label style={{ display: "block", marginBottom: 6 }}>Email *</label>
+            </label>
+            <label className={styles.label}>
+              Email
               <input
                 name="email"
                 type="email"
                 value={form.email}
                 onChange={handleChange}
                 placeholder="you@example.com"
-                style={inputStyle}
+                className={styles.input}
+                required
               />
-            </div>
+            </label>
           </div>
 
-          <div style={{ marginTop: 16 }}>
-            <label style={{ display: "block", marginBottom: 6 }}>Subject</label>
+          <label className={styles.label}>
+            Subject
             <input
               name="subject"
               value={form.subject}
               onChange={handleChange}
-              placeholder="How can we help?"
-              style={inputStyle}
+              placeholder="What can we help with?"
+              className={styles.input}
             />
-          </div>
+          </label>
 
-          <div style={{ marginTop: 16 }}>
-            <label style={{ display: "block", marginBottom: 6 }}>Message *</label>
+          <label className={styles.label}>
+            Message
             <textarea
               name="message"
               value={form.message}
               onChange={handleChange}
-              placeholder="Write your message..."
+              placeholder="Tell us a bit about what you need."
               rows={6}
-              style={{ ...inputStyle, resize: "vertical" }}
+              className={styles.textarea}
+              required
             />
-          </div>
+          </label>
 
           {status === "error" && (
-            <p style={{ color: "#b00020", marginTop: 12 }}>
-              Please fill out Name, Email, and Message.
-            </p>
+            <p className={styles.error}>Please fill out Name, Email, and Message.</p>
           )}
 
           {status === "sent" && (
-            <p style={{ color: "#0a7a28", marginTop: 12 }}>
-              Message sent. Thank you!
-            </p>
+            <p className={styles.success}>Message sent. Thank you!</p>
           )}
 
-          <button
-            type="submit"
-            disabled={status === "sending"}
-            style={{
-              marginTop: 16,
-              padding: "12px 16px",
-              borderRadius: 12,
-              border: "1px solid #ddd",
-              background: status === "sending" ? "#f2f2f2" : "#2f2a3a",
-              color: status === "sending" ? "#777" : "#fff",
-              cursor: status === "sending" ? "not-allowed" : "pointer",
-              fontWeight: 600,
-            }}
-          >
+          <button className={styles.button} type="submit" disabled={status === "sending"}>
             {status === "sending" ? "Sending..." : "Send message"}
           </button>
         </form>
 
-        <div
-          style={{
-            border: "1px solid #e5e5e5",
-            borderRadius: 16,
-            padding: 24,
-            background: "#fff",
-          }}
-        >
-          <h2 style={{ fontSize: 22, marginBottom: 10 }}>Contact info</h2>
-          <p style={{ color: "#555", marginBottom: 12 }}>
-            Heritage Makers — supporting local artisans and heritage-inspired handmade goods.
+        <aside className={styles.infoCard}>
+          <h2 className={styles.infoTitle}>Contact details</h2>
+          <p className={styles.infoText}>
+            Reach out for support, partnerships, or maker applications. We&apos;re happy
+            to connect.
           </p>
 
-          <ul style={{ listStyle: "none", padding: 0, margin: 0, color: "#333" }}>
-            <li style={{ marginBottom: 8 }}>
-              <strong>Email:</strong> support@heritagemakers.example
-            </li>
-            <li style={{ marginBottom: 8 }}>
-              <strong>Phone:</strong> (000) 000-0000
-            </li>
-            <li style={{ marginBottom: 8 }}>
-              <strong>Hours:</strong> Mon–Fri, 9:00am–5:00pm
-            </li>
-          </ul>
+          <div className={styles.infoList}>
+            <div>
+              <span className={styles.infoLabel}>Email</span>
+              <p className={styles.infoValue}>support@heritagemakers.com</p>
+            </div>
+            <div>
+              <span className={styles.infoLabel}>Phone</span>
+              <p className={styles.infoValue}>+1 (208) 555-0134</p>
+            </div>
+            <div>
+              <span className={styles.infoLabel}>Hours</span>
+              <p className={styles.infoValue}>Mon-Fri, 9:00am-5:00pm MT</p>
+            </div>
+            <div>
+              <span className={styles.infoLabel}>Location</span>
+              <p className={styles.infoValue}>Boise, Idaho</p>
+            </div>
+          </div>
 
-          <p style={{ marginTop: 14, color: "#555" }}>
-            (These are placeholders—replace with your team’s real contact details if required.)
-          </p>
-        </div>
+          <div className={styles.note}>
+            For maker applications, include a link to your portfolio or shop.
+          </div>
+        </aside>
       </section>
     </main>
   );
 }
-
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "12px 12px",
-  borderRadius: 12,
-  border: "1px solid #ddd",
-  outline: "none",
-};

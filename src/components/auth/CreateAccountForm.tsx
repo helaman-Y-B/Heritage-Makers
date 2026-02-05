@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import styles from "./CreateAccountForm.module.css";
 
 export default function CreateAccountForm() {
@@ -69,8 +70,34 @@ export default function CreateAccountForm() {
         />
       </label>
 
+      <fieldset className={styles.roleGroup}>
+        <legend className={styles.roleLegend}>Join as</legend>
+        <div className={styles.roleOptions}>
+          <label className={styles.roleOption}>
+            <input
+              type="radio"
+              name="role"
+              value="buyer"
+              defaultChecked
+              required
+            />
+            Buyer
+            <span className={styles.roleHint}>Shop and place orders</span>
+          </label>
+          <label className={styles.roleOption}>
+            <input type="radio" name="role" value="seller" required />
+            Maker
+            <span className={styles.roleHint}>Sell your handmade products</span>
+          </label>
+        </div>
+      </fieldset>
+
       <label className={styles.checkbox}>
-        <input type="checkbox" name="terms" required />I agree to the terms
+        <input type="checkbox" name="terms" required />
+        I agree to the{" "}
+        <Link className={styles.inlineLink} href="/terms">
+          terms
+        </Link>
       </label>
 
       <button className={styles.button} type="submit" disabled={loading}>

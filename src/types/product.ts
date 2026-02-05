@@ -8,6 +8,8 @@ export type Product = {
   rating: number;      // 0 - 5
   reviewsCount: number;
   description: string;
+  imageUrl: string;
+  imageAlt: string;
   isSustainable: boolean;
   inStock: boolean;
 };

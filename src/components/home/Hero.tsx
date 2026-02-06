@@ -1,14 +1,10 @@
 import Link from "next/link";
 import styles from "./Hero.module.css";
-import db from "@/db/dbConnection";
+import selectAll from "@/models/selectUsers";
 
-export default function Hero() {
+export default async function Hero() {
 
-  const data = db();
-
-  forEach(row in data) {
-    
-  }
+  const data = await selectAll();
 
   return (
     <section className={styles.hero}>
@@ -35,7 +31,12 @@ export default function Hero() {
         <span className={styles.badge}>⭐ Reviews & ratings</span>
         <span className={styles.badge}>🌍 Sustainable focus</span>
       </div>
-      <div>data</div>
+      <div>
+        {data.map((user) => {
+          console.log(user);
+         return <p key={user.user_id + user.name}>{user.firstname}</p>;  
+        })}
+      </div>
     </section>
   );
 }

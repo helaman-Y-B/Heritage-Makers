@@ -74,7 +74,7 @@ export function getProductById(id: string) {
   return products.find((p) => p.id === id);
 }
 
-export function formatPrice(value: number) {
+//export function formatPrice(value: number) {
   // Week 4: simple formatting; later can use locale/currency settings
-  return `£${value.toFixed(2)}`;
-}
+  //return `£${value.toFixed(2)}`;
+//}

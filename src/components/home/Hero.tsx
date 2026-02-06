@@ -1,7 +1,15 @@
 import Link from "next/link";
 import styles from "./Hero.module.css";
+import db from "@/db/dbConnection";
 
 export default function Hero() {
+
+  const data = db();
+
+  forEach(row in data) {
+    
+  }
+
   return (
     <section className={styles.hero}>
       <p className={styles.kicker}>Handcrafted goods • Local artisans • Sustainable shopping</p>
@@ -27,6 +35,7 @@ export default function Hero() {
         <span className={styles.badge}>⭐ Reviews & ratings</span>
         <span className={styles.badge}>🌍 Sustainable focus</span>
       </div>
+      <div>data</div>
     </section>
   );
 }

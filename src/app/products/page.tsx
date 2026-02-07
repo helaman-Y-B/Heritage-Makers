@@ -30,7 +30,7 @@ export default async function ProductsPage() {
       </div>
 
       <section className={styles.grid}>
-        {products.map((p) => (
+        {products.map((p: any) => (
           <ProductCard key={p.id + p.firstname} product={p} />
         ))}
       </section>

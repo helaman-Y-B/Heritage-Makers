@@ -1,9 +1,9 @@
-import { Product } from "@/types/product";
+/*import { Product } from "@/types/product";
 
 // Week 4: mock data (later replaced by DB/API in Week 5)
 export const products: Product[] = [
   {
-    id: "ankara-tote",
+    id: 1,
     name: "Ankara Heritage Tote Bag",
     maker: "Ayo Textiles",
     price: 28,
@@ -16,7 +16,7 @@ export const products: Product[] = [
     inStock: true,
   },
   {
-    id: "carved-wood-bowl",
+    id: 2,
     name: "Carved Wooden Bowl",
     maker: "Olu Woodcraft",
     price: 34,
@@ -29,7 +29,7 @@ export const products: Product[] = [
     inStock: true,
   },
   {
-    id: "clay-mug-set",
+    id: 3,
     name: "Clay Mug Set (2pcs)",
     maker: "Heritage Ceramics",
     price: 22,
@@ -42,7 +42,7 @@ export const products: Product[] = [
     inStock: false,
   },
   {
-    id: "beaded-bracelet",
+    id: 4,
     name: "Beaded Bracelet",
     maker: "Kemi Jewelry",
     price: 12,
@@ -55,7 +55,7 @@ export const products: Product[] = [
     inStock: true,
   },
   {
-    id: "heritage-wall-art",
+    id: 5,
     name: "Heritage Wall Art Print",
     maker: "Zion Studio",
     price: 18,
@@ -77,4 +77,4 @@ export function getProductById(id: string) {
 //export function formatPrice(value: number) {
   // Week 4: simple formatting; later can use locale/currency settings
   //return `£${value.toFixed(2)}`;
-//}
+//}*/

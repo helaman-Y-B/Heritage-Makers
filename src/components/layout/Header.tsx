@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Container from "./Container";
 import Navigation from "./Navigation";
+import AuthNavButton from "../auth/AuthNavButton";
 
 export default function Header() {
   return (
@@ -32,7 +33,10 @@ export default function Header() {
             Heritage Makers
           </Link>
 
-          <Navigation />
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            <Navigation />
+            <AuthNavButton />
+          </div>
         </div>
       </Container>
     </header>

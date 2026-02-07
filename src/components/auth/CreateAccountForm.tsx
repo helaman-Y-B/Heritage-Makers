@@ -5,31 +5,37 @@ import styles from "./CreateAccountForm.module.css";
 
 export default function CreateAccountForm() {
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
+    setErrorMsg(null);
+    setSuccessMsg(null);
 
-    const formData = new FormData(e.currentTarget);
-    const payload = Object.fromEntries(formData.entries());
-    console.log("CREATE ACCOUNT payload:", payload);
+    try {
+      const formData = new FormData(e.currentTarget);
+      const payload = Object.fromEntries(formData.entries());
+      console.log("CREATE ACCOUNT payload:", payload);
 
-    // Send form data to the server by using fetch API
-    const response = await fetch("/api/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // Transforms payload to JSON string
-      body: JSON.stringify(payload),
-    });
-    // Handle response
-    if (!response.ok) {
-      throw new Error("Failed to create user");
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const text = await response.text().catch(() => "");
+        throw new Error(text || "Failed to create user");
+      }
+
+      setSuccessMsg("Account created successfully.");
+    } catch (err: any) {
+      setErrorMsg(err?.message || "Failed to create user.");
+    } finally {
+      setLoading(false);
     }
-
-    await new Promise((r) => setTimeout(r, 700));
-    setLoading(false);
   }
 
   return (
@@ -86,6 +92,9 @@ export default function CreateAccountForm() {
       <label className={styles.checkbox}>
         <input type="checkbox" name="terms" required />I agree to the terms
       </label>
+
+      {errorMsg && <p style={{ color: "crimson", marginTop: 8 }}>{errorMsg}</p>}
+      {successMsg && <p style={{ color: "green", marginTop: 8 }}>{successMsg}</p>}
 
       <button className={styles.button} type="submit" disabled={loading}>
         {loading ? "Creating account..." : "Create account"}

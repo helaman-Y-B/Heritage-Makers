@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Container from "@/components/layout/Container";
-import { formatPrice, getProductById } from "@/lib/products";
+//import { formatPrice, getProductById } from "@/lib/products";
+import getProducts from "@/models/getProducts";
+import Image from "next/image";
 import styles from "./details.module.css";
 
 type Props = {
@@ -9,7 +11,10 @@ type Props = {
 
 export default async function ProductDetailsPage({ params }: Props) {
   const { id } = await params;
-  const product = getProductById(id);
+  console.log("Product ID from URL:", id); // Debug log to check the ID
+  const products = await getProducts();
+
+  const product = products.find((p) => p.id === parseInt(id));
 
   if (!product) {
     return (
@@ -39,13 +44,11 @@ export default async function ProductDetailsPage({ params }: Props) {
 
         <article className={styles.panel}>
           <div className={styles.heroRow}>
-            <div className={styles.thumb} aria-hidden="true" />
-
-            <div>
-              <h1 className={styles.title}>{product.name}</h1>
+            <Image src={product.img_path} width={300} height={300} alt={product.product_name} className={styles.thumb} aria-hidden="true"/>
+              <h1 className={styles.title}>{product.product_name}</h1>
 
               <p className={styles.muted}>
-                By <strong>{product.maker}</strong> • {product.category}
+                By <strong>{product.firstname + " " + product.lastname}</strong> • {product.category}
               </p>
 
               <p className={styles.muted}>
@@ -53,7 +56,7 @@ export default async function ProductDetailsPage({ params }: Props) {
                 {!product.inStock && " • Out of stock"}
               </p>
 
-              <p className={styles.price}>{formatPrice(product.price)}</p>
+              <p className={styles.price}>${product.price}</p>
 
               <div className={styles.buttonRow}>
                 <button className={styles.button} disabled={!product.inStock}>
@@ -64,9 +67,8 @@ export default async function ProductDetailsPage({ params }: Props) {
                 </button>
               </div>
             </div>
-          </div>
 
-          <p className={styles.muted}>{product.description}</p>
+          <p className={styles.muted}>{product.product_description}</p>
         </article>
       </div>
     </Container>

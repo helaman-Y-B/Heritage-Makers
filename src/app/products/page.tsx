@@ -1,13 +1,16 @@
 import Container from "@/components/layout/Container";
 import ProductCard from "@/components/products/ProductCard";
-import { products } from "@/lib/products";
+//import { products } from "@/lib/products";
+import getProducts from "@/models/getProducts";
 import styles from "./products.module.css";
 
 export const metadata = {
   title: "Products | Heritage Makers",
 };
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  const products = await getProducts();
+  
   return (
     <Container>
       <header className={styles.header}>
@@ -27,8 +30,8 @@ export default function ProductsPage() {
       </div>
 
       <section className={styles.grid}>
-        {products.map((p) => (
-          <ProductCard key={p.id} product={p} />
+        {products.map((p: any) => (
+          <ProductCard key={p.id + p.firstname} product={p} />
         ))}
       </section>
     </Container>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./LoginForm.module.css";
+import GoogleAuthButton from "./GoogleAuthButton";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -14,9 +15,15 @@ export default function LoginForm() {
     setLoading(true);
     setError(null);
 
+<<<<<<< HEAD
+=======
+    // Placeholder: email/password auth is NOT implemented yet.
+    // This does NOT create a session. It only logs the payload.
+>>>>>>> f6fb371 (Add Google auth UI, Providers, and auth nav button)
     const formData = new FormData(e.currentTarget);
     const payload = Object.fromEntries(formData.entries());
 
+<<<<<<< HEAD
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
@@ -36,6 +43,10 @@ export default function LoginForm() {
     } finally {
       setLoading(false);
     }
+=======
+    await new Promise((r) => setTimeout(r, 600));
+    setLoading(false);
+>>>>>>> f6fb371 (Add Google auth UI, Providers, and auth nav button)
   }
 
   return (
@@ -80,7 +91,14 @@ export default function LoginForm() {
         {loading ? "Signing in..." : "Sign in"}
       </button>
 
+<<<<<<< HEAD
       {error && <p className={styles.error}>{error}</p>}
+=======
+      {/* Google sign-in directly under the Sign in button */}
+      <div style={{ marginTop: 12 }}>
+        <GoogleAuthButton />
+      </div>
+>>>>>>> f6fb371 (Add Google auth UI, Providers, and auth nav button)
 
       <p className={styles.footerText}>
         Don&apos;t have an account?{" "}

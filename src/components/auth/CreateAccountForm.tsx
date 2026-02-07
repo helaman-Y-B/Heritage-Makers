@@ -7,12 +7,18 @@ import styles from "./CreateAccountForm.module.css";
 
 export default function CreateAccountForm() {
   const [loading, setLoading] = useState(false);
+<<<<<<< HEAD
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+=======
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+>>>>>>> f6fb371 (Add Google auth UI, Providers, and auth nav button)
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
+<<<<<<< HEAD
     setError(null);
 
     const formData = new FormData(e.currentTarget);
@@ -40,6 +46,30 @@ export default function CreateAccountForm() {
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create user");
+=======
+    setErrorMsg(null);
+    setSuccessMsg(null);
+
+    try {
+      const formData = new FormData(e.currentTarget);
+      const payload = Object.fromEntries(formData.entries());
+      console.log("CREATE ACCOUNT payload:", payload);
+
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const text = await response.text().catch(() => "");
+        throw new Error(text || "Failed to create user");
+      }
+
+      setSuccessMsg("Account created successfully.");
+    } catch (err: any) {
+      setErrorMsg(err?.message || "Failed to create user.");
+>>>>>>> f6fb371 (Add Google auth UI, Providers, and auth nav button)
     } finally {
       setLoading(false);
     }
@@ -125,6 +155,9 @@ export default function CreateAccountForm() {
           terms
         </Link>
       </label>
+
+      {errorMsg && <p style={{ color: "crimson", marginTop: 8 }}>{errorMsg}</p>}
+      {successMsg && <p style={{ color: "green", marginTop: 8 }}>{successMsg}</p>}
 
       <button className={styles.button} type="submit" disabled={loading}>
         {loading ? "Creating account..." : "Create account"}

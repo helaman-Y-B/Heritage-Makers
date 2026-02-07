@@ -1,11 +1,7 @@
 import Link from "next/link";
 import styles from "./Hero.module.css";
-import selectAll from "@/models/selectUsers";
 
 export default async function Hero() {
-
-  const data = await selectAll();
-
   return (
     <section className={styles.hero}>
       <p className={styles.kicker}>Handcrafted goods • Local artisans • Sustainable shopping</p>
@@ -30,12 +26,6 @@ export default async function Hero() {
         <span className={styles.badge}>✅ Curated items</span>
         <span className={styles.badge}>⭐ Reviews & ratings</span>
         <span className={styles.badge}>🌍 Sustainable focus</span>
-      </div>
-      <div>
-        {data.map((user) => {
-          console.log(user);
-         return <p key={user.user_id + user.name}>{user.firstname}</p>;  
-        })}
       </div>
     </section>
   );

@@ -1,6 +1,6 @@
 import Container from "@/components/layout/Container";
 import ProductCard from "@/components/products/ProductCard";
-import { products } from "@/lib/products";
+//import { products } from "@/lib/products";
 import getProducts from "@/models/getProducts";
 import styles from "./products.module.css";
 
@@ -10,8 +10,6 @@ export const metadata = {
 
 export default async function ProductsPage() {
   const products = await getProducts();
-
-  console.log(products);
   
   return (
     <Container>
@@ -33,7 +31,7 @@ export default async function ProductsPage() {
 
       <section className={styles.grid}>
         {products.map((p) => (
-          <ProductCard key={p.product_id} product={p} />
+          <ProductCard key={p.product_id + p.firstname} product={p} />
         ))}
       </section>
     </Container>

@@ -20,7 +20,7 @@ export default function ProductCard({ product }: Props) {
         </div>
 
         <p className={styles.muted}>
-          By <strong>{product.user_id}</strong> • {product.category}
+          By <strong>{product.firstname + " " + product.lastname}</strong> • {product.category}
         </p>
 
         <p className={styles.muted}>
@@ -29,8 +29,8 @@ export default function ProductCard({ product }: Props) {
         </p>
 
         <div className={styles.priceRow}>
-          <span className={styles.price}>{product.price}</span>
-          <Link className={styles.link} href={`/products/${product.product_id}`}>
+          <span className={styles.price}>${product.price}</span>
+          <Link className={styles.link} href={`/products/${product.id}`}>
             View details →
           </Link>
         </div>

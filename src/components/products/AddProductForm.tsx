@@ -19,9 +19,10 @@ export default function AddProductForm({ enabled }: Props) {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const form = e.currentTarget;
     setLoading(true);
     setError(null);
-    const formData = new FormData(e.currentTarget);
+    const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
 
     try {
@@ -34,7 +35,7 @@ export default function AddProductForm({ enabled }: Props) {
         const data = await response.json().catch(() => ({}));
         throw new Error(data.error || "Failed to add product");
       }
-      (e.currentTarget as HTMLFormElement).reset();
+      form?.reset();
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to add product");

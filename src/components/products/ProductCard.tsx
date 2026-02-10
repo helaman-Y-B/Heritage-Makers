@@ -19,11 +19,18 @@ export default function ProductCard({
   canManageOwn,
   currentUserId,
 }: Props) {
+  const safeImgPath =
+    typeof product.img_path === "string" && product.img_path.trim()
+      ? product.img_path.startsWith("/")
+        ? product.img_path
+        : `/${product.img_path}`
+      : "/productsImg/ceramic-plates.jpg";
+
   return (
     <article className={styles.card}>
       <div className={styles.thumb}>
         <Image
-          src={product.img_path}
+          src={safeImgPath}
           alt={product.product_name}
           fill
           sizes="(max-width: 520px) 100vw, (max-width: 900px) 50vw, 33vw"

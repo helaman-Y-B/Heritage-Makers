@@ -38,6 +38,7 @@ export async function POST(req: Request) {
   const img_path = String(body.img_path || "").trim();
   const price = Number(body.price);
   const inStock = body.inStock === "on" || body.inStock === true;
+  const inStockValue = inStock ? 1 : 0;
 
   if (!product_name || !product_description || !category || !img_path || Number.isNaN(price)) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -47,7 +48,7 @@ export async function POST(req: Request) {
     INSERT INTO products
       (product_name, product_description, price, category, user_id, img_path, rating, "reviewsCount", "inStock")
     VALUES
-      (${product_name}, ${product_description}, ${price}, ${category}, ${user.id}, ${img_path}, 0, 0, ${inStock})
+      (${product_name}, ${product_description}, ${price}, ${category}, ${user.id}, ${img_path}, 0, 0, ${inStockValue})
     RETURNING id
   `;
 

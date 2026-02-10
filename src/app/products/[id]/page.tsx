@@ -79,6 +79,13 @@ export default async function ProductDetailsPage({ params }: Props) {
     );
   }
 
+  const safeImgPath =
+    typeof product.img_path === "string" && product.img_path.trim()
+      ? product.img_path.startsWith("/")
+        ? product.img_path
+        : `/${product.img_path}`
+      : "/productsImg/ceramic-plates.jpg";
+
   return (
     <Container>
       <div className={styles.wrap}>
@@ -90,7 +97,7 @@ export default async function ProductDetailsPage({ params }: Props) {
           <div className={styles.heroRow}>
             <div className={styles.thumb}>
               <Image
-                src={product.img_path}
+                src={safeImgPath}
                 alt={product.product_name}
                 fill
                 sizes="(max-width: 700px) 100vw, 240px"

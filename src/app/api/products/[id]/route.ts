@@ -54,16 +54,19 @@ export async function PUT(req: Request, ctx: { params: Promise<{ id: string }> }
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
+  const inStockRaw =
+    body.inStock === "on" || body.inStock === true || body.inStock === false
+      ? Boolean(body.inStock)
+      : null;
+  const inStockValue = inStockRaw === null ? current.inStock : inStockRaw ? 1 : 0;
+
   const next = {
     product_name: body.product_name ?? current.product_name,
     product_description: body.product_description ?? current.product_description,
     price: Number.isFinite(Number(body.price)) ? Number(body.price) : current.price,
     category: body.category ?? current.category,
     img_path: body.img_path ?? current.img_path,
-    inStock:
-      body.inStock === "on" || body.inStock === true || body.inStock === false
-        ? Boolean(body.inStock)
-        : current.inStock,
+    inStock: inStockValue,
   };
 
   await sql`

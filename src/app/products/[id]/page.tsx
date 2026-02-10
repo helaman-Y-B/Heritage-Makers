@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Container from "@/components/layout/Container";
-//import { formatPrice, getProductById } from "@/lib/products";
-import getProducts from "@/models/getProducts";
+import getProductById from "@/models/getProductById";
 import Image from "next/image";
 import styles from "./details.module.css";
 
@@ -11,10 +10,55 @@ type Props = {
 
 export default async function ProductDetailsPage({ params }: Props) {
   const { id } = await params;
-  console.log("Product ID from URL:", id); // Debug log to check the ID
-  const products = await getProducts();
+  const parsedId = parseInt(id, 10);
+  if (!Number.isFinite(parsedId)) {
+    return (
+      <Container>
+        <div className={styles.wrap}>
+          <Link className={styles.back} href="/products">
+            â† Back to products
+          </Link>
 
-  const product = products.find((p) => p.id === parseInt(id));
+          <div className={styles.panel}>
+            <h1 className={styles.title}>Product not found</h1>
+            <p className={styles.muted}>
+              The product youâ€™re looking for doesnâ€™t exist (yet).
+            </p>
+          </div>
+        </div>
+      </Container>
+    );
+  }
+
+  let productRow;
+  try {
+    productRow = await getProductById(parsedId);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "";
+    if (message.includes("missing_connection_string") || message.includes("POSTGRES_URL")) {
+      return (
+        <Container>
+          <div className={styles.wrap}>
+            <Link className={styles.back} href="/products">
+              â† Back to products
+            </Link>
+
+            <div className={styles.panel}>
+              <h1 className={styles.title}>Database not configured</h1>
+              <p className={styles.muted}>
+                Set POSTGRES_URL in your .env.local to load this product.
+              </p>
+            </div>
+          </div>
+        </Container>
+      );
+    }
+    throw error;
+  }
+
+  const product = productRow
+    ? { ...productRow, isSustainable: Boolean(productRow.isSustainable) }
+    : undefined;
 
   if (!product) {
     return (

@@ -1,6 +1,7 @@
 import { sql } from "@vercel/postgres";
+import { ProductRow } from "@/types/product";
 
-export default async function getProducts() {
+export default async function getProducts(): Promise<ProductRow[]> {
     const { rows } = await sql`SELECT 
     users.firstname, 
     users.lastname, 
@@ -15,5 +16,5 @@ export default async function getProducts() {
     p."inStock" 
     FROM products p INNER JOIN users ON p.user_id = users.user_id`;
 
-    return rows;
+    return rows as ProductRow[];
 }

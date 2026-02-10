@@ -92,7 +92,7 @@ export default async function ProductDetailsPage({ params }: Props) {
               <h1 className={styles.title}>{product.product_name}</h1>
 
               <p className={styles.muted}>
-                By <strong>{product.firstname + " " + product.lastname}</strong> • {product.category}
+                By <strong>{product.firstname}</strong> • {product.category}
               </p>
 
               <p className={styles.muted}>

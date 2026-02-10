@@ -20,7 +20,7 @@ export default function ProductCard({ product }: Props) {
         </div>
 
         <p className={styles.muted}>
-          By <strong>{product.firstname + " " + product.lastname}</strong> • {product.category}
+          By <strong>{product.firstname}</strong> • {product.category}
         </p>
 
         <p className={styles.muted}>

@@ -2,14 +2,15 @@ import Container from "@/components/layout/Container";
 import ProductCard from "@/components/products/ProductCard";
 import { CURRENT_USER } from "@/lib/auth/currentUser";
 import { userHasAnyPermission, userHasPermission } from "@/lib/auth/rbac";
-import { products } from "@/lib/products";
+import getProducts from "@/models/getProducts";
+import { Product } from "@/types/product";
 import styles from "./products.module.css";
 
 export const metadata = {
   title: "Products | Heritage Makers",
 };
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
   const canCreateOrder = userHasPermission(CURRENT_USER, "create_order");
   const canManageProducts = userHasAnyPermission(CURRENT_USER, [
     "manage_products",
@@ -32,6 +33,29 @@ export default function ProductsPage() {
     canManageCategories ||
     canViewReports ||
     canViewEarnings;
+
+  let products: Product[] = [];
+  try {
+    products = (await getProducts()).map((p) => ({
+      ...p,
+      isSustainable: Boolean(p.isSustainable),
+    }));
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "";
+    if (message.includes("missing_connection_string") || message.includes("POSTGRES_URL")) {
+      return (
+        <Container>
+          <header className={styles.header}>
+            <h1 className={styles.title}>Products</h1>
+            <p className={styles.sub}>
+              Database connection is missing. Set POSTGRES_URL in your .env.local.
+            </p>
+          </header>
+        </Container>
+      );
+    }
+    throw error;
+  }
 
   return (
     <Container>
@@ -93,7 +117,7 @@ export default function ProductsPage() {
 
       <section className={styles.grid}>
         {products.map((p) => (
-          <ProductCard key={p.id} product={p} canCreateOrder={canCreateOrder} />
+          <ProductCard key={`${p.id}-${p.firstname}`} product={p} canCreateOrder={canCreateOrder} />
         ))}
       </section>
     </Container>

@@ -15,6 +15,20 @@ export default function CreateAccountForm() {
     const payload = Object.fromEntries(formData.entries());
     console.log("CREATE ACCOUNT payload:", payload);
 
+    // Send form data to the server by using fetch API
+    const response = await fetch("/api/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // Transforms payload to JSON string
+      body: JSON.stringify(payload),
+    });
+    // Handle response
+    if (!response.ok) {
+      throw new Error("Failed to create user");
+    }
+
     await new Promise((r) => setTimeout(r, 700));
     setLoading(false);
   }

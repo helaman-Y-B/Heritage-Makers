@@ -1,7 +1,7 @@
 import Link from "next/link";
 import styles from "./Hero.module.css";
 
-export default function Hero() {
+export default async function Hero() {
   return (
     <section className={styles.hero}>
       <p className={styles.kicker}>Handcrafted goods - Local artisans - Sustainable shopping</p>

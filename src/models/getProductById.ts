@@ -7,6 +7,7 @@ export default async function getProductById(id: number): Promise<ProductRow | u
       users.firstname, 
       users.lastname, 
       p.id, 
+      p.user_id,
       p.product_name, 
       p.product_description, 
       p.price, 

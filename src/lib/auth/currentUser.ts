@@ -9,8 +9,8 @@ type CookieUser = {
   role: User["role"];
 };
 
-export function getCurrentUser(): User | null {
-  const cookieStore = cookies();
+export async function getCurrentUser(): Promise<User | null> {
+  const cookieStore = await cookies();
   const raw = cookieStore.get("hm_user")?.value;
   if (!raw) return null;
 

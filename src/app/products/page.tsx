@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/auth/currentUser";
 import { userHasAnyPermission, userHasPermission } from "@/lib/auth/rbac";
 import getProducts from "@/models/getProducts";
 import { Product } from "@/types/product";
+import AddProductForm from "@/components/products/AddProductForm";
 import styles from "./products.module.css";
 
 export const metadata = {
@@ -11,7 +12,7 @@ export const metadata = {
 };
 
 export default async function ProductsPage() {
-  const currentUser = getCurrentUser();
+  const currentUser = await getCurrentUser();
   const canCreateOrder = userHasPermission(currentUser, "create_order");
   const canManageProducts = userHasAnyPermission(currentUser, [
     "manage_products",
@@ -34,6 +35,8 @@ export default async function ProductsPage() {
     canManageCategories ||
     canViewReports ||
     canViewEarnings;
+  const canManageOwnProducts = userHasPermission(currentUser, "manage_own_products");
+  const canManageAnyProducts = userHasPermission(currentUser, "manage_products");
 
   let products: Product[] = [];
   try {
@@ -66,6 +69,8 @@ export default async function ProductsPage() {
           Browse heritage-inspired handmade pieces from local makers.
         </p>
       </header>
+
+      <AddProductForm enabled={canManageAnyProducts || canManageOwnProducts} />
 
       {/* Week 4: UI-only "search" (not functional yet). We'll wire it in Week 4/5 */}
       <div className={styles.toolbar}>
@@ -118,7 +123,14 @@ export default async function ProductsPage() {
 
       <section className={styles.grid}>
         {products.map((p) => (
-          <ProductCard key={`${p.id}-${p.firstname}`} product={p} canCreateOrder={canCreateOrder} />
+          <ProductCard
+            key={`${p.id}-${p.firstname}`}
+            product={p}
+            canCreateOrder={canCreateOrder}
+            canManageAny={canManageAnyProducts}
+            canManageOwn={canManageOwnProducts}
+            currentUserId={currentUser ? Number(currentUser.id) : undefined}
+          />
         ))}
       </section>
     </Container>

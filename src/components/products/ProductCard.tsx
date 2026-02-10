@@ -2,13 +2,23 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./ProductCard.module.css";
 import { Product } from "@/types/product";
+import ProductActions from "./ProductActions";
 
 type Props = {
   product: Product;
   canCreateOrder: boolean;
+  canManageAny: boolean;
+  canManageOwn: boolean;
+  currentUserId?: number;
 };
 
-export default function ProductCard({ product, canCreateOrder }: Props) {
+export default function ProductCard({
+  product,
+  canCreateOrder,
+  canManageAny,
+  canManageOwn,
+  currentUserId,
+}: Props) {
   return (
     <article className={styles.card}>
       <div className={styles.thumb}>
@@ -50,6 +60,13 @@ export default function ProductCard({ product, canCreateOrder }: Props) {
         ) : (
           <p className={styles.restricted}>Buyers can place orders</p>
         )}
+
+        <ProductActions
+          product={product}
+          canManageAny={canManageAny}
+          canManageOwn={canManageOwn}
+          currentUserId={currentUserId}
+        />
       </div>
     </article>
   );

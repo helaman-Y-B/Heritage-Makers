@@ -10,14 +10,3 @@ export async function POST() {
   });
   return response;
 }
-
-export async function GET(req: Request) {
-  const response = NextResponse.redirect(new URL("/", req.url));
-  response.cookies.set("hm_user", "", {
-    httpOnly: true,
-    sameSite: "lax",
-    path: "/",
-    maxAge: 0,
-  });
-  return response;
-}

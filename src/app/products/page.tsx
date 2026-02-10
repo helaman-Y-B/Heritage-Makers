@@ -1,6 +1,6 @@
 import Container from "@/components/layout/Container";
 import ProductCard from "@/components/products/ProductCard";
-import { CURRENT_USER } from "@/lib/auth/currentUser";
+import { getCurrentUser } from "@/lib/auth/currentUser";
 import { userHasAnyPermission, userHasPermission } from "@/lib/auth/rbac";
 import getProducts from "@/models/getProducts";
 import { Product } from "@/types/product";
@@ -11,20 +11,21 @@ export const metadata = {
 };
 
 export default async function ProductsPage() {
-  const canCreateOrder = userHasPermission(CURRENT_USER, "create_order");
-  const canManageProducts = userHasAnyPermission(CURRENT_USER, [
+  const currentUser = getCurrentUser();
+  const canCreateOrder = userHasPermission(currentUser, "create_order");
+  const canManageProducts = userHasAnyPermission(currentUser, [
     "manage_products",
     "manage_own_products",
   ]);
-  const canViewOrders = userHasAnyPermission(CURRENT_USER, [
+  const canViewOrders = userHasAnyPermission(currentUser, [
     "view_orders",
     "view_own_orders",
   ]);
-  const canManageUsers = userHasPermission(CURRENT_USER, "manage_users");
-  const canApproveMakers = userHasPermission(CURRENT_USER, "approve_makers");
-  const canManageCategories = userHasPermission(CURRENT_USER, "manage_categories");
-  const canViewReports = userHasPermission(CURRENT_USER, "view_reports");
-  const canViewEarnings = userHasPermission(CURRENT_USER, "view_earnings");
+  const canManageUsers = userHasPermission(currentUser, "manage_users");
+  const canApproveMakers = userHasPermission(currentUser, "approve_makers");
+  const canManageCategories = userHasPermission(currentUser, "manage_categories");
+  const canViewReports = userHasPermission(currentUser, "view_reports");
+  const canViewEarnings = userHasPermission(currentUser, "view_earnings");
   const showRoleTools =
     canManageProducts ||
     canViewOrders ||

@@ -1,23 +1,41 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./LoginForm.module.css";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
-    // Placeholder: connect to real auth later (Week 5).
     const formData = new FormData(e.currentTarget);
     const payload = Object.fromEntries(formData.entries());
-    console.log("LOGIN payload:", payload);
 
-    // Fake delay so you can see the loading state
-    await new Promise((r) => setTimeout(r, 600));
-    setLoading(false);
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: payload.email }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || "Login failed");
+      }
+
+      router.push("/products");
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Login failed");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -61,6 +79,8 @@ export default function LoginForm() {
       <button className={styles.button} type="submit" disabled={loading}>
         {loading ? "Signing in..." : "Sign in"}
       </button>
+
+      {error && <p className={styles.error}>{error}</p>}
 
       <p className={styles.footerText}>
         Don&apos;t have an account?{" "}

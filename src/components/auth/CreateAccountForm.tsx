@@ -2,35 +2,47 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import styles from "./CreateAccountForm.module.css";
 
 export default function CreateAccountForm() {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
     const formData = new FormData(e.currentTarget);
     const payload = Object.fromEntries(formData.entries());
-    console.log("CREATE ACCOUNT payload:", payload);
+    try {
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
-    // Send form data to the server by using fetch API
-    const response = await fetch("/api/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // Transforms payload to JSON string
-      body: JSON.stringify(payload),
-    });
-    // Handle response
-    if (!response.ok) {
-      throw new Error("Failed to create user");
+      if (!response.ok) {
+        throw new Error("Failed to create user");
+      }
+
+      await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: payload.email }),
+      });
+
+      router.push("/products");
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to create user");
+    } finally {
+      setLoading(false);
     }
-
-    await new Promise((r) => setTimeout(r, 700));
-    setLoading(false);
   }
 
   return (
@@ -117,6 +129,8 @@ export default function CreateAccountForm() {
       <button className={styles.button} type="submit" disabled={loading}>
         {loading ? "Creating account..." : "Create account"}
       </button>
+
+      {error && <p className={styles.error}>{error}</p>}
 
       <p className={styles.footerText}>
         Already have an account?{" "}

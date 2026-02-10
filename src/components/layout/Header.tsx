@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Container from "./Container";
 import Navigation from "./Navigation";
-import { CURRENT_USER } from "@/lib/auth/currentUser";
+import { getCurrentUser } from "@/lib/auth/currentUser";
 
 const ROLE_LABELS = {
   admin: "Admin",
@@ -10,6 +10,7 @@ const ROLE_LABELS = {
 } as const;
 
 export default function Header() {
+  const currentUser = getCurrentUser();
   return (
     <header
       style={{
@@ -42,7 +43,7 @@ export default function Header() {
           <Navigation />
 
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            {CURRENT_USER && (
+            {currentUser && (
               <span
                 style={{
                   fontSize: "0.8rem",
@@ -55,24 +56,42 @@ export default function Header() {
                   whiteSpace: "nowrap",
                 }}
               >
-                Role: {ROLE_LABELS[CURRENT_USER.role]}
+                Role: {ROLE_LABELS[currentUser.role]}
               </span>
             )}
-            <Link
-              href="/login"
-              style={{
-                fontSize: "0.85rem",
-                fontWeight: 700,
-                color: "var(--hm-accent-700)",
-                border: "1px solid var(--border)",
-                padding: "0.3rem 0.7rem",
-                borderRadius: "999px",
-                background: "#fff",
-                whiteSpace: "nowrap",
-              }}
-            >
-              Login
-            </Link>
+            {currentUser ? (
+              <Link
+                href="/api/auth/logout"
+                style={{
+                  fontSize: "0.85rem",
+                  fontWeight: 700,
+                  color: "var(--hm-accent-700)",
+                  border: "1px solid var(--border)",
+                  padding: "0.3rem 0.7rem",
+                  borderRadius: "999px",
+                  background: "#fff",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Logout
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                style={{
+                  fontSize: "0.85rem",
+                  fontWeight: 700,
+                  color: "var(--hm-accent-700)",
+                  border: "1px solid var(--border)",
+                  padding: "0.3rem 0.7rem",
+                  borderRadius: "999px",
+                  background: "#fff",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Login
+              </Link>
+            )}
           </div>
         </div>
       </Container>

@@ -3,13 +3,35 @@ import ProductCard from "@/components/products/ProductCard";
 //import { products } from "@/lib/products";
 import getProducts from "@/models/getProducts";
 import styles from "./products.module.css";
+import { Product } from "@/types/product";
 
 export const metadata = {
   title: "Products | Heritage Makers",
 };
 
 export default async function ProductsPage() {
-  const products = await getProducts();
+  let products: Product[] = [];
+  try {
+    products = (await getProducts()).map((p) => ({
+      ...p,
+      isSustainable: Boolean(p.isSustainable),
+    }));
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "";
+    if (message.includes("missing_connection_string") || message.includes("POSTGRES_URL")) {
+      return (
+        <Container>
+          <header className={styles.header}>
+            <h1 className={styles.title}>Products</h1>
+            <p className={styles.sub}>
+              Database connection is missing. Set POSTGRES_URL in your .env.local.
+            </p>
+          </header>
+        </Container>
+      );
+    }
+    throw error;
+  }
   
   return (
     <Container>

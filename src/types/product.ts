@@ -13,3 +13,7 @@ export type Product = {
   isSustainable: boolean;
   inStock: boolean;
 };
+
+export type ProductRow = Omit<Product, "isSustainable"> & {
+  isSustainable?: boolean;
+};

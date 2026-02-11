@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import styles from "./LoginForm.module.css";
+import GoogleAuthButton from "./GoogleAuthButton";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -10,12 +11,12 @@ export default function LoginForm() {
     e.preventDefault();
     setLoading(true);
 
-    // Placeholder: connect to real auth later (Week 5).
+    // Placeholder: email/password auth is NOT implemented yet.
+    // This does NOT create a session. It only logs the payload.
     const formData = new FormData(e.currentTarget);
     const payload = Object.fromEntries(formData.entries());
     console.log("LOGIN payload:", payload);
 
-    // Fake delay so you can see the loading state
     await new Promise((r) => setTimeout(r, 600));
     setLoading(false);
   }
@@ -61,6 +62,11 @@ export default function LoginForm() {
       <button className={styles.button} type="submit" disabled={loading}>
         {loading ? "Signing in..." : "Sign in"}
       </button>
+
+      {/* Google sign-in directly under the Sign in button */}
+      <div style={{ marginTop: 12 }}>
+        <GoogleAuthButton />
+      </div>
 
       <p className={styles.footerText}>
         Don&apos;t have an account?{" "}

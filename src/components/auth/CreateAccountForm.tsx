@@ -126,9 +126,6 @@ export default function CreateAccountForm() {
         </Link>
       </label>
 
-      {errorMsg && <p style={{ color: "crimson", marginTop: 8 }}>{errorMsg}</p>}
-      {successMsg && <p style={{ color: "green", marginTop: 8 }}>{successMsg}</p>}
-
       <button className={styles.button} type="submit" disabled={loading}>
         {loading ? "Creating account..." : "Create account"}
       </button>

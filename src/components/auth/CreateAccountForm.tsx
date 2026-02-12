@@ -1,38 +1,45 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import styles from "./CreateAccountForm.module.css";
 
 export default function CreateAccountForm() {
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
-    setErrorMsg(null);
-    setSuccessMsg(null);
+    setError(null);
 
+    const formData = new FormData(e.currentTarget);
+    const payload = Object.fromEntries(formData.entries());
     try {
-      const formData = new FormData(e.currentTarget);
-      const payload = Object.fromEntries(formData.entries());
-      console.log("CREATE ACCOUNT payload:", payload);
-
       const response = await fetch("/api/users", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
-        const text = await response.text().catch(() => "");
-        throw new Error(text || "Failed to create user");
+        throw new Error("Failed to create user");
       }
 
-      setSuccessMsg("Account created successfully.");
-    } catch (err: any) {
-      setErrorMsg(err?.message || "Failed to create user.");
+      await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: payload.email }),
+      });
+
+      router.push("/products");
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to create user");
     } finally {
       setLoading(false);
     }
@@ -89,16 +96,41 @@ export default function CreateAccountForm() {
         />
       </label>
 
-      <label className={styles.checkbox}>
-        <input type="checkbox" name="terms" required />I agree to the terms
-      </label>
+      <fieldset className={styles.roleGroup}>
+        <legend className={styles.roleLegend}>Join as</legend>
+        <div className={styles.roleOptions}>
+          <label className={styles.roleOption}>
+            <input
+              type="radio"
+              name="role"
+              value="buyer"
+              defaultChecked
+              required
+            />
+            Buyer
+            <span className={styles.roleHint}>Shop and place orders</span>
+          </label>
+          <label className={styles.roleOption}>
+            <input type="radio" name="role" value="seller" required />
+            Maker
+            <span className={styles.roleHint}>Sell your handmade products</span>
+          </label>
+        </div>
+      </fieldset>
 
-      {errorMsg && <p style={{ color: "crimson", marginTop: 8 }}>{errorMsg}</p>}
-      {successMsg && <p style={{ color: "green", marginTop: 8 }}>{successMsg}</p>}
+      <label className={styles.checkbox}>
+        <input type="checkbox" name="terms" required />
+        I agree to the{" "}
+        <Link className={styles.inlineLink} href="/terms">
+          terms
+        </Link>
+      </label>
 
       <button className={styles.button} type="submit" disabled={loading}>
         {loading ? "Creating account..." : "Create account"}
       </button>
+
+      {error && <p className={styles.error}>{error}</p>}
 
       <p className={styles.footerText}>
         Already have an account?{" "}

@@ -1,24 +1,42 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./LoginForm.module.css";
 import GoogleAuthButton from "./GoogleAuthButton";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
-    // Placeholder: email/password auth is NOT implemented yet.
-    // This does NOT create a session. It only logs the payload.
     const formData = new FormData(e.currentTarget);
     const payload = Object.fromEntries(formData.entries());
-    console.log("LOGIN payload:", payload);
 
-    await new Promise((r) => setTimeout(r, 600));
-    setLoading(false);
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: payload.email }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || "Login failed");
+      }
+
+      router.push("/products");
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Login failed");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -43,7 +61,7 @@ export default function LoginForm() {
           name="password"
           required
           autoComplete="current-password"
-          placeholder="••••••••"
+          placeholder="********"
           minLength={6}
         />
       </label>
@@ -63,7 +81,7 @@ export default function LoginForm() {
         {loading ? "Signing in..." : "Sign in"}
       </button>
 
-      {/* Google sign-in directly under the Sign in button */}
+      {error && <p className={styles.error}>{error}</p>}
       <div style={{ marginTop: 12 }}>
         <GoogleAuthButton />
       </div>

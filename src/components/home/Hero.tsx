@@ -4,7 +4,7 @@ import styles from "./Hero.module.css";
 export default async function Hero() {
   return (
     <section className={styles.hero}>
-      <p className={styles.kicker}>Handcrafted goods • Local artisans • Sustainable shopping</p>
+      <p className={styles.kicker}>Handcrafted goods - Local artisans - Sustainable shopping</p>
 
       <h1 className={styles.title}>Discover heritage-inspired handmade pieces.</h1>
 
@@ -17,15 +17,18 @@ export default async function Hero() {
         <Link className={styles.primaryBtn} href="/products">
           Browse Products
         </Link>
-        <Link className={styles.secondaryBtn} href="/about">
+        <Link className={styles.secondaryBtn} href="/aboutUs">
           Meet the Makers
+        </Link>
+        <Link className={styles.secondaryBtn} href="/become-a-maker">
+          Become a Maker
         </Link>
       </div>
 
       <div className={styles.metaRow}>
-        <span className={styles.badge}>✅ Curated items</span>
-        <span className={styles.badge}>⭐ Reviews & ratings</span>
-        <span className={styles.badge}>🌍 Sustainable focus</span>
+        <span className={styles.badge}>Curated items</span>
+        <span className={styles.badge}>Reviews and ratings</span>
+        <span className={styles.badge}>Sustainable focus</span>
       </div>
     </section>
   );

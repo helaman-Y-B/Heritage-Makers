@@ -1,7 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/layout/Container";
 import getProductById from "@/models/getProductById";
-import Image from "next/image";
 import styles from "./details.module.css";
 
 type Props = {
@@ -16,13 +16,13 @@ export default async function ProductDetailsPage({ params }: Props) {
       <Container>
         <div className={styles.wrap}>
           <Link className={styles.back} href="/products">
-            â† Back to products
+            ← Back to products
           </Link>
 
           <div className={styles.panel}>
             <h1 className={styles.title}>Product not found</h1>
             <p className={styles.muted}>
-              The product youâ€™re looking for doesnâ€™t exist (yet).
+              The product you’re looking for doesn’t exist (yet).
             </p>
           </div>
         </div>
@@ -40,7 +40,7 @@ export default async function ProductDetailsPage({ params }: Props) {
         <Container>
           <div className={styles.wrap}>
             <Link className={styles.back} href="/products">
-              â† Back to products
+              ← Back to products
             </Link>
 
             <div className={styles.panel}>
@@ -71,13 +71,20 @@ export default async function ProductDetailsPage({ params }: Props) {
           <div className={styles.panel}>
             <h1 className={styles.title}>Product not found</h1>
             <p className={styles.muted}>
-              The product you’re looking for doesn’t exist (yet).
+              The product you are looking for does not exist (yet).
             </p>
           </div>
         </div>
       </Container>
     );
   }
+
+  const safeImgPath =
+    typeof product.img_path === "string" && product.img_path.trim()
+      ? product.img_path.startsWith("/")
+        ? product.img_path
+        : `/${product.img_path}`
+      : "/productsImg/ceramic-plates.jpg";
 
   return (
     <Container>
@@ -88,15 +95,25 @@ export default async function ProductDetailsPage({ params }: Props) {
 
         <article className={styles.panel}>
           <div className={styles.heroRow}>
-            <Image src={product.img_path} width={300} height={300} alt={product.product_name} className={styles.thumb} aria-hidden="true"/>
+            <div className={styles.thumb}>
+              <Image
+                src={safeImgPath}
+                alt={product.product_name}
+                fill
+                sizes="(max-width: 700px) 100vw, 240px"
+                className={styles.image}
+              />
+            </div>
+
+            <div>
               <h1 className={styles.title}>{product.product_name}</h1>
 
               <p className={styles.muted}>
-                By <strong>{product.firstname + " " + product.lastname}</strong> • {product.category}
+                By <strong>{product.firstname}</strong> • {product.category}
               </p>
 
               <p className={styles.muted}>
-                ⭐ {product.rating} ({product.reviewsCount})
+                Rating: {product.rating} ({product.reviewsCount})
                 {!product.inStock && " • Out of stock"}
               </p>
 
@@ -111,6 +128,7 @@ export default async function ProductDetailsPage({ params }: Props) {
                 </button>
               </div>
             </div>
+          </div>
 
           <p className={styles.muted}>{product.product_description}</p>
         </article>

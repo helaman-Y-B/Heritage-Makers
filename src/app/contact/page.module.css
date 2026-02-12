@@ -1,0 +1,172 @@
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.hero {
+  display: grid;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(2.1rem, 4vw, 3rem);
+}
+
+.subtitle {
+  margin: 0;
+  max-width: 65ch;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.7fr);
+}
+
+.form {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.8rem;
+  background: #fff;
+  display: grid;
+  gap: 1.2rem;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.05);
+}
+
+.formHeader {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.formTitle {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.formSubtitle {
+  margin: 0;
+  color: var(--muted);
+}
+
+.columns {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.input,
+.textarea {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.7rem 0.8rem;
+  font: inherit;
+  background: #fff;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.button {
+  border: none;
+  border-radius: 999px;
+  padding: 0.75rem 1.6rem;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  justify-self: start;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  margin: 0;
+  color: #b00020;
+  font-weight: 600;
+}
+
+.success {
+  margin: 0;
+  color: #0a7a28;
+  font-weight: 600;
+}
+
+.infoCard {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.6rem;
+  background: linear-gradient(160deg, #fff, var(--surface));
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.infoTitle {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.infoText {
+  margin: 0;
+  color: var(--muted);
+}
+
+.infoList {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.infoLabel {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.infoValue {
+  margin: 0.25rem 0 0;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.note {
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+  background: #fff;
+  border: 1px dashed var(--border);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .columns {
+    grid-template-columns: 1fr;
+  }
+}

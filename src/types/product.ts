@@ -5,6 +5,7 @@ export type Product = {
   img_path: string;           // path to product image (relative to /public)
   firstname: string;
   lastname: string;
+  user_id: number;
   price: number;       // store as number; format later
   category: "Textiles" | "Woodwork" | "Ceramics" | "Jewelry" | "Art";
   rating: number;      // 0 - 5

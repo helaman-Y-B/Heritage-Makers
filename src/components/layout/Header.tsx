@@ -1,9 +1,11 @@
 import Link from "next/link";
 import Container from "./Container";
 import Navigation from "./Navigation";
-import AuthNavButton from "../auth/AuthNavButton";
+import { getCurrentUser } from "@/lib/auth/currentUser";
+import AuthStatus from "./AuthStatus";
 
-export default function Header() {
+export default async function Header() {
+  const currentUser = await getCurrentUser();
   return (
     <header
       style={{
@@ -33,10 +35,9 @@ export default function Header() {
             Heritage Makers
           </Link>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <Navigation />
-            <AuthNavButton />
-          </div>
+          <Navigation />
+
+          <AuthStatus currentUser={currentUser} />
         </div>
       </Container>
     </header>

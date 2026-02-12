@@ -19,8 +19,13 @@
   height: 140px;
   width: 100%;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--surface), #fff);
   border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.image {
+  object-fit: cover;
 }
 
 .meta {
@@ -68,4 +73,51 @@
 .link {
   color: var(--primary);
   font-weight: 600;
+}
+
+.actionButton {
+  margin-top: 0.5rem;
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.actionButton:hover {
+  filter: brightness(0.95);
+}
+
+.restricted {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.actionRow {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.actionLink {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  background: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--primary);
+}
+
+.actionLink:hover {
+  filter: brightness(0.95);
+}
+
+.danger {
+  color: #b42318;
+  border-color: #f3c2bf;
 }

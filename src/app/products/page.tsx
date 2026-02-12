@@ -1,15 +1,43 @@
 import Container from "@/components/layout/Container";
 import ProductCard from "@/components/products/ProductCard";
-//import { products } from "@/lib/products";
+import { getCurrentUser } from "@/lib/auth/currentUser";
+import { userHasAnyPermission, userHasPermission } from "@/lib/auth/rbac";
 import getProducts from "@/models/getProducts";
-import styles from "./products.module.css";
 import { Product } from "@/types/product";
+import AddProductForm from "@/components/products/AddProductForm";
+import styles from "./products.module.css";
 
 export const metadata = {
   title: "Products | Heritage Makers",
 };
 
 export default async function ProductsPage() {
+  const currentUser = await getCurrentUser();
+  const canCreateOrder = userHasPermission(currentUser, "create_order");
+  const canManageProducts = userHasAnyPermission(currentUser, [
+    "manage_products",
+    "manage_own_products",
+  ]);
+  const canViewOrders = userHasAnyPermission(currentUser, [
+    "view_orders",
+    "view_own_orders",
+  ]);
+  const canManageUsers = userHasPermission(currentUser, "manage_users");
+  const canApproveMakers = userHasPermission(currentUser, "approve_makers");
+  const canManageCategories = userHasPermission(currentUser, "manage_categories");
+  const canViewReports = userHasPermission(currentUser, "view_reports");
+  const canViewEarnings = userHasPermission(currentUser, "view_earnings");
+  const showRoleTools =
+    canManageProducts ||
+    canViewOrders ||
+    canManageUsers ||
+    canApproveMakers ||
+    canManageCategories ||
+    canViewReports ||
+    canViewEarnings;
+  const canManageOwnProducts = userHasPermission(currentUser, "manage_own_products");
+  const canManageAnyProducts = userHasPermission(currentUser, "manage_products");
+
   let products: Product[] = [];
   try {
     products = (await getProducts()).map((p) => ({
@@ -32,7 +60,7 @@ export default async function ProductsPage() {
     }
     throw error;
   }
-  
+
   return (
     <Container>
       <header className={styles.header}>
@@ -42,18 +70,67 @@ export default async function ProductsPage() {
         </p>
       </header>
 
-      {/* Week 4: UI-only “search” (not functional yet). We'll wire it in Week 4/5 */}
+      <AddProductForm enabled={canManageAnyProducts || canManageOwnProducts} />
+
+      {/* Week 4: UI-only "search" (not functional yet). We'll wire it in Week 4/5 */}
       <div className={styles.toolbar}>
         <input
           className={styles.input}
-          placeholder="Search products (Week 4 UI)…"
+          placeholder="Search products (Week 4 UI)..."
           aria-label="Search products"
         />
+        {showRoleTools && (
+          <div className={styles.roleTools}>
+            <span className={styles.roleLabel}>Role tools</span>
+            {canManageProducts && (
+              <button className={styles.toolButton} type="button">
+                Add product
+              </button>
+            )}
+            {canViewOrders && (
+              <button className={styles.toolButton} type="button">
+                View orders
+              </button>
+            )}
+            {canViewEarnings && (
+              <button className={styles.toolButton} type="button">
+                View earnings
+              </button>
+            )}
+            {canManageUsers && (
+              <button className={styles.toolButton} type="button">
+                Manage users
+              </button>
+            )}
+            {canApproveMakers && (
+              <button className={styles.toolButton} type="button">
+                Approve makers
+              </button>
+            )}
+            {canManageCategories && (
+              <button className={styles.toolButton} type="button">
+                Manage categories
+              </button>
+            )}
+            {canViewReports && (
+              <button className={styles.toolButton} type="button">
+                View reports
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       <section className={styles.grid}>
-        {products.map((p: any) => (
-          <ProductCard key={p.id + p.firstname} product={p} />
+        {products.map((p) => (
+          <ProductCard
+            key={`${p.id}-${p.firstname}`}
+            product={p}
+            canCreateOrder={canCreateOrder}
+            canManageAny={canManageAnyProducts}
+            canManageOwn={canManageOwnProducts}
+            currentUserId={currentUser ? Number(currentUser.id) : undefined}
+          />
         ))}
       </section>
     </Container>

@@ -6,6 +6,7 @@ import getProducts from "@/models/getProducts";
 import { Product } from "@/types/product";
 import AddProductForm from "@/components/products/AddProductForm";
 import styles from "./products.module.css";
+import { ErrorBoundary } from "react-error-boundary";
 
 export const metadata = {
   title: "Products | Heritage Makers",
@@ -122,7 +123,9 @@ export default async function ProductsPage() {
       </div>
 
       <section className={styles.grid}>
+        
         {products.map((p) => (
+          <ErrorBoundary fallback={<article className={styles.cardError}>Failed to load product.</article>}>
           <ProductCard
             key={`${p.id}-${p.firstname}`}
             product={p}
@@ -131,6 +134,7 @@ export default async function ProductsPage() {
             canManageOwn={canManageOwnProducts}
             currentUserId={currentUser ? Number(currentUser.id) : undefined}
           />
+          </ErrorBoundary>
         ))}
       </section>
     </Container>

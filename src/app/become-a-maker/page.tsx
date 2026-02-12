@@ -7,16 +7,9 @@ import styles from "./page.module.css";
 };*/
 
 export default function BecomeAMakerPage() {
-  /*
-    For error handling, we need to fisrt make the form submission work.
-    Then we can add error handling logic to display the Error component
-    when something goes wrong during form submission.
-
-    The error would for when the form fails to submit, either due to
-    network issues or server-side validation errors.
-
-    Error message: "An error occurred" + specific error details.
-  */
+  /**
+   * Become a Maker form submission handler and webpage component.
+   */
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
       e.preventDefault();
       // Gather form data into an object

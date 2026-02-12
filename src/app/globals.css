@@ -1,7 +1,7 @@
 /* ================================
    Heritage Makers – Global Styles
    ================================ */
-@import "../styles/tokens.css";   
+@import "../styles/tokens.css";
 
 /* Design Tokens */
 :root {
@@ -69,6 +69,17 @@ a {
   text-decoration: none;
 }
 
+/* Error page */
+.errorPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 100px auto;
+  gap: 1rem;
+}
+
 @media screen and (max-width: 520px) {
   header div div {
     flex-direction: column;
@@ -89,8 +100,12 @@ a {
   }
 
   @keyframes nav-arrow {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(180deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(180deg);
+    }
   }
 
   /* Navigation */
@@ -103,9 +118,8 @@ a {
   }
 }
 
-@media screen and (min-size:521px) {
+@media screen and (min-size: 521px) {
   #nav-arrow {
     display: none;
   }
-  
 }

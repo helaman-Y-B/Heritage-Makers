@@ -3,6 +3,8 @@ import Link from "next/link";
 import Container from "@/components/layout/Container";
 import getProductById from "@/models/getProductById";
 import styles from "./details.module.css";
+import fs from "fs";
+import path from "path";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -79,12 +81,24 @@ export default async function ProductDetailsPage({ params }: Props) {
     );
   }
 
-  const safeImgPath =
-    typeof product.img_path === "string" && product.img_path.trim()
+  // Check if the image path exists
+  const imgPath = product.img_path;
+  if (imgPath) {
+    // Handle if the image path is missing or incorrect
+    const imgFullPath = imgPath.startsWith("/") ? imgPath.slice(1) : imgPath;
+    // Stores the full path to the image in the public directory
+    const fullPath = path.join(process.cwd(), "public", imgFullPath);
+    if (!fs.existsSync(fullPath)) {
+      // If the image file does not exist, use a default placeholder image
+      product.img_path = "/productsImg/placeHolder.png"; 
+    }
+  }
+  /*let safeImgPath =
+    typeof product.img_path === "string" && product.img_path.trim() !== ""
       ? product.img_path.startsWith("/")
         ? product.img_path
         : `/${product.img_path}`
-      : "/productsImg/ceramic-plates.jpg";
+      : "/productsImg/placeHolder.png";*/
 
   return (
     <Container>
@@ -97,7 +111,7 @@ export default async function ProductDetailsPage({ params }: Props) {
           <div className={styles.heroRow}>
             <div className={styles.thumb}>
               <Image
-                src={safeImgPath}
+                src={product.img_path}
                 alt={product.product_name}
                 fill
                 sizes="(max-width: 700px) 100vw, 240px"

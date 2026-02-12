@@ -1,12 +1,8 @@
 import Link from "next/link";
 import Container from "./Container";
 import Navigation from "./Navigation";
-<<<<<<< HEAD
 import { getCurrentUser } from "@/lib/auth/currentUser";
 import AuthStatus from "./AuthStatus";
-=======
-import AuthNavButton from "../auth/AuthNavButton";
->>>>>>> f6fb371 (Add Google auth UI, Providers, and auth nav button)
 
 export default async function Header() {
   const currentUser = await getCurrentUser();
@@ -39,16 +35,9 @@ export default async function Header() {
             Heritage Makers
           </Link>
 
-<<<<<<< HEAD
           <Navigation />
 
           <AuthStatus currentUser={currentUser} />
-=======
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <Navigation />
-            <AuthNavButton />
-          </div>
->>>>>>> f6fb371 (Add Google auth UI, Providers, and auth nav button)
         </div>
       </Container>
     </header>

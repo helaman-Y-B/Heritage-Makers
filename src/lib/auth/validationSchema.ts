@@ -27,3 +27,19 @@ export const createAccountSchema = z.object({
 });
 
 export type CreateAccountInput = z.infer<typeof createAccountSchema>;
+
+export const addProductSchema = z.object({
+    product_name: z.string().min(1, "Product name is required")
+    .max(100, "Product name is too long")
+    .regex(/^[\w\s'-]+$/, "Product name contains invalid characters"),
+    price: z.preprocess((val) => {
+        if (typeof val === "string" && val.trim() !== "") return Number(val);
+        return val;
+    }, z.number().positive("Price must be a positive number")),
+    category: z.enum(["Ceramics", "Woodwork", "Art", "Textiles", "Jewelry"]),
+    img_path: z.string().optional(),
+    description: z.string().optional(),
+    inStock: z.boolean(),
+})
+
+export type AddProductInput = z.infer<typeof addProductSchema>;

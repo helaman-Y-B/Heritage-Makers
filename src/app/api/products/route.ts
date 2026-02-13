@@ -33,7 +33,7 @@ export async function POST(req: Request) {
 
   const body = await req.json();
   const product_name = String(body.product_name || "").trim();
-  const product_description = String(body.product_description || "").trim();
+  const product_description = String(body.description || "").trim();
   const category = String(body.category || "").trim();
   const img_path = String(body.img_path || "").trim();
   const price = Number(body.price);

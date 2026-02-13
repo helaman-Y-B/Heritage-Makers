@@ -2,7 +2,6 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { createAccountSchema, CreateAccountInput } from "@/lib/auth/validationSchema";
 import { useState } from "react";
 import Link from "next/link";

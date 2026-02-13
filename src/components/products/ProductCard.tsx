@@ -1,8 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./ProductCard.module.css";
 import { Product } from "@/types/product";
 import ProductActions from "./ProductActions";
+import { useState } from "react";
 
 type Props = {
   product: Product;
@@ -19,22 +22,25 @@ export default function ProductCard({
   canManageOwn,
   currentUserId,
 }: Props) {
-  const safeImgPath =
+  let safeImgPath =
     typeof product.img_path === "string" && product.img_path.trim()
       ? product.img_path.startsWith("/")
         ? product.img_path
         : `/${product.img_path}`
-      : "/productsImg/ceramic-plates.jpg";
+      : "/productsImg/placeHolder.png";
+
+      const [img, setImg] = useState(safeImgPath);
 
   return (
     <article className={styles.card}>
       <div className={styles.thumb}>
         <Image
-          src={safeImgPath}
+          src={img}
           alt={product.product_name}
           fill
           sizes="(max-width: 520px) 100vw, (max-width: 900px) 50vw, 33vw"
           className={styles.image}
+          onError={() => setImg("/productsImg/placeHolder.png")}
         />
       </div>
 

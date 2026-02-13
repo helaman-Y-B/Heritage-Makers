@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./AddProductForm.module.css";
+import { useForm, type Resolver } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { addProductSchema, AddProductInput } from "@/lib/auth/validationSchema";
 
 type Props = {
   enabled: boolean;
@@ -17,19 +20,22 @@ export default function AddProductForm({ enabled }: Props) {
 
   if (!enabled) return null;
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const form = e.currentTarget;
+  const { register, handleSubmit, formState: { errors } } = useForm<AddProductInput>({
+        resolver: zodResolver(addProductSchema) as unknown as Resolver<AddProductInput>,
+      });
+  
+      console.log("Form errors:", errors);
+
+  const onSubmit = async (data: AddProductInput) => {
     setLoading(true);
     setError(null);
-    const formData = new FormData(form);
-    const payload = Object.fromEntries(formData.entries());
+    const form = document.querySelector("form");
 
     try {
       const response = await fetch("/api/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(data),
       });
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
@@ -45,41 +51,46 @@ export default function AddProductForm({ enabled }: Props) {
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.row}>
         <label className={styles.label}>
           Name
-          <input className={styles.input} name="product_name" required />
+          <input className={styles.input} {...register("product_name")} name="product_name" required />
+          {errors.product_name && <p className={styles.error}>{errors.product_name.message}</p>}
         </label>
         <label className={styles.label}>
           Price
-          <input className={styles.input} name="price" type="number" step="0.01" required />
+          <input className={styles.input} {...register("price", { valueAsNumber: true })} name="price" type="number" step="0.01" required />
+          {errors.price && <p className={styles.error}>{errors.price.message}</p>}
         </label>
         <label className={styles.label}>
           Category
-          <select className={styles.input} name="category" defaultValue="Ceramics" required>
+          <select className={styles.input} {...register("category")} name="category" defaultValue="Ceramics" required>
             {categories.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
               </option>
             ))}
           </select>
+          {errors.category && <p className={styles.error}>{errors.category.message}</p>}
         </label>
       </div>
 
       <label className={styles.label}>
         Image path (e.g. `/productsImg/ceramic-plates.jpg`)
-        <input className={styles.input} name="img_path" required />
+        <input className={styles.input} {...register("img_path")} name="img_path" required />
+        {errors.img_path && <p className={styles.error}>{errors.img_path.message}</p>}
       </label>
 
       <label className={styles.label}>
         Description
-        <textarea className={styles.textarea} name="product_description" rows={3} required />
+        <textarea className={styles.textarea} {...register("description")} name="description" rows={3} required />
+        {errors.description && <p className={styles.error}>{errors.description.message}</p>}
       </label>
 
       <div className={styles.row}>
         <label className={styles.checkbox}>
-          <input type="checkbox" name="inStock" defaultChecked />
+          <input type="checkbox" {...register("inStock")} name="inStock" defaultChecked />
           In stock
         </label>
         <button className={styles.button} type="submit" disabled={loading}>

@@ -105,6 +105,7 @@ export default function CreateAccountForm() {
           minLength={6}
           placeholder="Minimum 6 characters"
         />
+        {errors.password && <p className={styles.error}>{errors.password.message}</p>}
       </label>
 
       <label className={styles.label}>

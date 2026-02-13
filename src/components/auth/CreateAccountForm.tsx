@@ -18,6 +18,8 @@ export default function CreateAccountForm() {
     const formData = new FormData(e.currentTarget);
     const payload = Object.fromEntries(formData.entries());
     try {
+      // Creates a new user by sending a POST request to the /api/users endpoint with the form data as JSON.
+      // Data retruns as JSON and if the response is not ok, an error is thrown.
       const response = await fetch("/api/users", {
         method: "POST",
         headers: {
@@ -30,10 +32,11 @@ export default function CreateAccountForm() {
         throw new Error("Failed to create user");
       }
 
+      // After successfully creating the user, it sends another POST request to the /api/auth/login endpoint to log the user in using their email and password.
       await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: payload.email }),
+        body: JSON.stringify({ email: payload.email, password: payload.password }),
       });
 
       router.push("/products");

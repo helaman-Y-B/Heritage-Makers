@@ -135,10 +135,10 @@ export default async function ProductDetailsPage({ params }: Props) {
 
               <div className={styles.buttonRow}>
                 <button className={styles.button} disabled={!product.inStock}>
-                  {product.inStock ? "Add to cart (Week 5)" : "Out of stock"}
+                  {product.inStock ? "Add to cart (Not finished)" : "Out of stock"}
                 </button>
                 <button className={`${styles.button} ${styles.secondary}`}>
-                  Save (Week 6)
+                  Save (Not finished)
                 </button>
               </div>
             </div>

@@ -71,7 +71,7 @@
     max-height: 70vw;
     max-width: 100%;
     width: 100%;
-    background-color: #e5e5e5;
+    background-color: #fff;
   }
 
   .aboutText {
@@ -105,21 +105,26 @@
 
 @media screen and (min-width: 1000px) {
   .aboutUs {
-    max-width: 70vw;
+    width: 70vw;
+    max-width: 1000px;
+    margin-bottom: 20px;
+    margin-top: 20px;
   }
 
   .aboutUs h1 {
-    font-size: 2vw;
+    font-size: 2em;
   }
 
   .aboutUs p {
-    font-size: 2vw;
+    font-size: 1.2em;
   }
 
   .aboutImages {
-    max-height: 50vw;
+    max-height: 500px;
     height: auto;
     width: 50%;
+    max-width: 350px;
+    border-radius: 12px;
   }
 
   .openAbout {

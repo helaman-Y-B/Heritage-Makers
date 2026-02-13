@@ -36,7 +36,7 @@
   align-items: center;
   padding: 0.4rem 0.6rem;
   border: 1px dashed var(--border);
-  border-radius: 999px;
+  border-radius: 12px;
   background: var(--surface);
 }
 
@@ -88,5 +88,11 @@
 @media (max-width: 520px) {
   .grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 500px) {
+  .roleTools {
+    border-radius: 999px;
   }
 }

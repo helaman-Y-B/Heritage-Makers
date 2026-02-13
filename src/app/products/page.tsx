@@ -77,7 +77,7 @@ export default async function ProductsPage() {
       <div className={styles.toolbar}>
         <input
           className={styles.input}
-          placeholder="Search products (Week 4 UI)..."
+          placeholder="Search products" // This is not working, we don't a search engine.
           aria-label="Search products"
         />
         {showRoleTools && (

@@ -20,6 +20,13 @@ export default function CreateAccountForm() {
     try {
       // Creates a new user by sending a POST request to the /api/users endpoint with the form data as JSON.
       // Data retruns as JSON and if the response is not ok, an error is thrown.
+
+      if (payload.password !== payload.confirmPassword) {
+        setError("Passwords do not match");
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch("/api/users", {
         method: "POST",
         headers: {
@@ -29,7 +36,8 @@ export default function CreateAccountForm() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create user");
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to create user");
       }
 
       // After successfully creating the user, it sends another POST request to the /api/auth/login endpoint to log the user in using their email and password.

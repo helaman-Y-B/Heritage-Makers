@@ -21,6 +21,8 @@ export async function POST(req: Request) {
     // Return the created user as a JSON response with a 201 status code
     return NextResponse.json({ user }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to create user" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to create user";
+    const status = message === "Email already in use" ? 409 : 500;
+    return NextResponse.json({ error: message }, { status });
   }
 }

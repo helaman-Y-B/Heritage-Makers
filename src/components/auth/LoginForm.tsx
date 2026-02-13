@@ -6,25 +6,32 @@ import styles from "./LoginForm.module.css";
 import GoogleAuthButton from "./GoogleAuthButton";
 
 export default function LoginForm() {
+  /**
+   * This component renders a login form and handles the login process.
+   * It manages loading and error states, and upon successful login,
+   * it redirects the user to the products page and refreshes the router.
+   */
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    // Prevent the default form submission behavior
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+    // Extract form data and convert it to a payload object
     const formData = new FormData(e.currentTarget);
     const payload = Object.fromEntries(formData.entries());
 
     try {
+      // Send a POST request to the login API endpoint with the email and password
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: payload.email }),
+        body: JSON.stringify({ email: payload.email, password: payload.password }),
       });
-
+      // If the response is not OK, attempt to parse the error message and throw an error
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
         throw new Error(data.error || "Login failed");
@@ -33,8 +40,10 @@ export default function LoginForm() {
       router.push("/products");
       router.refresh();
     } catch (err) {
+      // If an error occurs, set the error state to display the error message
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {
+      // Regardless of success or failure, set loading to false to re-enable the form
       setLoading(false);
     }
   }

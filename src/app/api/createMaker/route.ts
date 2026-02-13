@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import submitMaker from "@/models/submitMaker";
+import { createMakerSchema } from "@/lib/auth/validationSchema";
 
 export async function POST(req: Request) {
   /*
@@ -11,12 +12,16 @@ export async function POST(req: Request) {
   try {
     // Parse the incoming JSON data from the request body
     const body = await req.json();
+
+    // Validate the incoming data with the createMakerSchema
+    const validatedData = createMakerSchema.safeParse(body);
+    if (!validatedData.success) {
+      return NextResponse.json({ error: validatedData.error.message }, { status: 400 });
+    }
+
     // Destructure the necessary fields from the body
     const { studioName, craftType, story, shopLink } = body;
-    // Validate required fields
-    if (!studioName || !craftType || !story) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-    }
+    
     // Sends data to the submitMaker function which interacts with the database
     const result = await submitMaker(studioName, craftType, story, shopLink);
     // Return a success response with the result of the database operation

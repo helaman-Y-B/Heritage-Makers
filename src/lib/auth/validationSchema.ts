@@ -43,3 +43,12 @@ export const addProductSchema = z.object({
 })
 
 export type AddProductInput = z.infer<typeof addProductSchema>;
+
+export const createMakerSchema = z.object({
+    studioName: z.string().min(2, "Studio name is too short").max(45, "Studio name is too long"),
+    craftType: z.string().min(2, "Craft type is too short").max(45, "Craft type is too long"),
+    story: z.string().min(10, "Story must be at least 10 characters").max(255, "Story is too long"),
+    shopLink: z.string().url("Invalid URL").optional(),
+})
+
+export type CreateMakerInput = z.infer<typeof createMakerSchema>;

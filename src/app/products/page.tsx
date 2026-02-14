@@ -7,12 +7,17 @@ import { Product } from "@/types/product";
 import AddProductForm from "@/components/products/AddProductForm";
 import styles from "./products.module.css";
 import { ErrorBoundary } from "react-error-boundary";
+import Link from "next/link";
 
 export const metadata = {
   title: "Products | Heritage Makers",
 };
 
 export default async function ProductsPage() {
+  /**
+   * Builds the products view based on the current user's role.
+   * Sellers are scoped to their own products, while admins and buyers can see all products.
+   */
   const currentUser = await getCurrentUser();
   const canCreateOrder = userHasPermission(currentUser, "create_order");
   const canManageProducts = userHasAnyPermission(currentUser, [
@@ -41,7 +46,9 @@ export default async function ProductsPage() {
 
   let products: Product[] = [];
   try {
-    products = (await getProducts()).map((p) => ({
+    const ownerUserId =
+      currentUser?.role === "seller" ? Number.parseInt(currentUser.id, 10) : undefined;
+    products = (await getProducts({ ownerUserId })).map((p) => ({
       ...p,
       isSustainable: Boolean(p.isSustainable),
     }));
@@ -67,7 +74,9 @@ export default async function ProductsPage() {
       <header className={styles.header}>
         <h1 className={styles.title}>Products</h1>
         <p className={styles.sub}>
-          Browse heritage-inspired handmade pieces from local makers.
+          {currentUser?.role === "seller"
+            ? "Manage your own handmade listings."
+            : "Browse heritage-inspired handmade pieces from local makers."}
         </p>
       </header>
 
@@ -84,19 +93,19 @@ export default async function ProductsPage() {
           <div className={styles.roleTools}>
             <span className={styles.roleLabel}>Role tools</span>
             {canManageProducts && (
-              <button className={styles.toolButton} type="button">
+              <Link className={styles.toolButton} href="#add-product">
                 Add product
-              </button>
+              </Link>
             )}
             {canViewOrders && (
-              <button className={styles.toolButton} type="button">
+              <Link className={styles.toolButton} href="/orders">
                 View orders
-              </button>
+              </Link>
             )}
             {canViewEarnings && (
-              <button className={styles.toolButton} type="button">
+              <Link className={styles.toolButton} href="/earnings">
                 View earnings
-              </button>
+              </Link>
             )}
             {canManageUsers && (
               <button className={styles.toolButton} type="button">
@@ -125,9 +134,11 @@ export default async function ProductsPage() {
       <section className={styles.grid}>
         
         {products.map((p) => (
-          <ErrorBoundary fallback={<article className={styles.cardError}>Failed to load product.</article>}>
+          <ErrorBoundary
+            key={`${p.id}-${p.user_id}`}
+            fallback={<article className={styles.cardError}>Failed to load product.</article>}
+          >
           <ProductCard
-            key={`${p.id}-${p.firstname}`}
             product={p}
             canCreateOrder={canCreateOrder}
             canManageAny={canManageAnyProducts}

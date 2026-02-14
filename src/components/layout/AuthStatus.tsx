@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
+import { useCart } from "@/components/cart/CartProvider";
 
 type Props = {
   currentUser: { role: "admin" | "seller" | "buyer" } | null;
@@ -15,10 +17,13 @@ const ROLE_LABELS = {
 
 export default function AuthStatus({ currentUser }: Props) {
   const router = useRouter();
+  const { itemCount } = useCart();
 
   async function handleLogout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/login");
+    /**
+     * Uses NextAuth sign-out so Google/session cookies are cleared consistently.
+     */
+    await signOut({ callbackUrl: "/login" });
     router.refresh();
   }
 
@@ -40,6 +45,23 @@ export default function AuthStatus({ currentUser }: Props) {
           Role: {ROLE_LABELS[currentUser.role]}
         </span>
       )}
+      {currentUser?.role === "buyer" ? (
+        <Link
+          href="/cart"
+          style={{
+            fontSize: "0.85rem",
+            fontWeight: 700,
+            color: "var(--hm-accent-700)",
+            border: "1px solid var(--border)",
+            padding: "0.3rem 0.7rem",
+            borderRadius: "999px",
+            background: "#fff",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Cart ({itemCount})
+        </Link>
+      ) : null}
       {currentUser ? (
         <button
           onClick={handleLogout}

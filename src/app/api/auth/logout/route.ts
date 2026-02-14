@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 
 export async function POST() {
-  const response = NextResponse.json({ ok: true }, { status: 200 });
-  response.cookies.set("hm_user", "", {
-    httpOnly: true,
-    sameSite: "lax",
-    path: "/",
-    maxAge: 0,
-  });
-  return response;
+  /**
+   * Legacy logout endpoint retained for backward compatibility.
+   * NextAuth sign-out should be used from the client (`signOut()`).
+   */
+  return NextResponse.json(
+    { error: "Use NextAuth signOut for logout." },
+    { status: 410 },
+  );
 }

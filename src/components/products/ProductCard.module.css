@@ -59,6 +59,15 @@
   margin: 0;
 }
 
+.makerLink {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.makerLink:hover {
+  text-decoration: underline;
+}
+
 .priceRow {
   display: flex;
   align-items: center;

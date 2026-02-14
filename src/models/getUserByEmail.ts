@@ -19,7 +19,11 @@ export default async function getUserByEmail(email: string, password: string): P
    */
   try {
     const { rows } = await sql`SELECT password FROM users WHERE email = ${email}`;
-    const isPasswordValid = await verifyPassword(rows[0]?.password || "", password);
+    if (!rows[0]?.password) {
+      return undefined;
+    }
+
+    const isPasswordValid = await verifyPassword(rows[0].password, password);
     if (!isPasswordValid) {
       return undefined;
     } else {
@@ -33,6 +37,6 @@ export default async function getUserByEmail(email: string, password: string): P
     }
   } catch (err) {
     console.error("Error fetching user by email:", err);
-    return undefined;
+    throw new Error("AUTH_LOOKUP_FAILED");
   }
 }

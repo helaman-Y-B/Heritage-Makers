@@ -1,35 +1,58 @@
 import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import getProducts from "@/models/getProducts";
-import { cookies } from "next/headers";
 import { addProductSchema } from "@/lib/auth/validationSchema";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth/authOptions";
+import { Role } from "@/lib/auth/roles";
+import { cookies } from "next/headers";
+import { isRoleAllowed } from "@/lib/auth/activeRole";
 
 type SessionUser = {
   id: number;
-  role: "admin" | "seller" | "buyer";
+  role: Role;
 };
 
 async function getSessionUser(): Promise<SessionUser | null> {
   /**
-   * Retrieves the current user's session information from cookies.
-   * Parses the "hm_user" cookie to extract the user's ID and role.
-   * Returns an object containing the user's ID and role, or null if the cookie is not found or invalid.
+   * Resolves the current API user from NextAuth session.
+   * Returns `null` when no valid authenticated session is available.
    */
-  const cookieStore = await cookies();
-  const raw = cookieStore.get("hm_user")?.value;
-  if (!raw) return null;
-  try {
-    const parsed = JSON.parse(raw) as { id: number; role: SessionUser["role"] };
-    return { id: parsed.id, role: parsed.role };
-  } catch {
+  const session = await getServerSession(authOptions);
+  const id = Number.parseInt(session?.user?.id ?? "", 10);
+  const maxRole = session?.user?.role;
+  if (!Number.isFinite(id) || !maxRole) {
     return null;
   }
+
+  // Apply "active role" cookie if it's allowed for this user.
+  const cookieStore = await cookies();
+  const requested = cookieStore.get("hm_active_role")?.value as Role | undefined;
+  const role = requested && isRoleAllowed(maxRole, requested) ? requested : maxRole;
+
+  return { id, role };
 }
 
-export async function GET() {
-  // Fetches the list of products from the database and returns it as a JSON response.
+export async function GET(req: Request) {
+  /**
+   * Returns products for the API.
+   * If the requester is a seller, we scope to their products by default.
+   * A valid `makerId` query param can also request a specific maker's products.
+   */
   try {
-    const products = await getProducts();
+    const user = await getSessionUser();
+    const { searchParams } = new URL(req.url);
+    const makerIdParam = searchParams.get("makerId");
+    const parsedMakerId = makerIdParam ? Number.parseInt(makerIdParam, 10) : NaN;
+
+    const ownerUserId =
+      Number.isFinite(parsedMakerId)
+        ? parsedMakerId
+        : user?.role === "seller"
+          ? user.id
+          : undefined;
+
+    const products = await getProducts({ ownerUserId });
     return NextResponse.json({ products }, { status: 200 });
   } catch (error) {
     console.error(error);

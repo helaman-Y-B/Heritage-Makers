@@ -1,23 +1,34 @@
 import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth/authOptions";
+import { Role } from "@/lib/auth/roles";
 import { cookies } from "next/headers";
-import { ca } from "zod/locales";
+import { isRoleAllowed } from "@/lib/auth/activeRole";
 
 type SessionUser = {
   id: number;
-  role: "admin" | "seller" | "buyer";
+  role: Role;
 };
 
 async function getSessionUser(): Promise<SessionUser | null> {
-  const cookieStore = await cookies();
-  const raw = cookieStore.get("hm_user")?.value;
-  if (!raw) return null;
-  try {
-    const parsed = JSON.parse(raw) as { id: number; role: SessionUser["role"] };
-    return { id: parsed.id, role: parsed.role };
-  } catch {
+  /**
+   * Resolves API caller identity from NextAuth session.
+   * This is the single source of truth for product ownership checks.
+   */
+  const session = await getServerSession(authOptions);
+  const id = Number.parseInt(session?.user?.id ?? "", 10);
+  const maxRole = session?.user?.role;
+  if (!Number.isFinite(id) || !maxRole) {
     return null;
   }
+
+  // Apply "active role" cookie if it's allowed for this user.
+  const cookieStore = await cookies();
+  const requested = cookieStore.get("hm_active_role")?.value as Role | undefined;
+  const role = requested && isRoleAllowed(maxRole, requested) ? requested : maxRole;
+
+  return { id, role };
 }
 
 async function getProductOwner(id: number): Promise<number | null> {

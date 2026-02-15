@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function AuthNavButton() {
   const { status } = useSession();
+  const router = useRouter();
 
-  // While session is loading, keep UI stable
   if (status === "loading") {
     return (
       <span
@@ -24,11 +25,18 @@ export default function AuthNavButton() {
     );
   }
 
+  async function handleLogout() {
+    // Single source of truth: our server logout clears hm_user + next-auth cookies
+    await fetch("/api/auth/logout", { method: "POST" }).catch(() => null);
+    router.refresh();
+    router.push("/login");
+  }
+
   if (status === "authenticated") {
     return (
       <button
         type="button"
-        onClick={() => signOut({ callbackUrl: "/" })}
+        onClick={handleLogout}
         style={{
           padding: "8px 12px",
           borderRadius: 8,

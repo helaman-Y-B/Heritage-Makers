@@ -67,7 +67,7 @@
   font-size: 0.9rem;
 }
 
-.badge {
+.badgeButton {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -75,4 +75,32 @@
   border-radius: 999px;
   border: 1px solid var(--hm-border);
   background: var(--hm-gray-100);
+  color: var(--hm-muted);
+  cursor: pointer;
+}
+
+.badgeButtonActive {
+  background: var(--hm-accent-700);
+  color: #fff;
+  border-color: var(--hm-accent-700);
+}
+
+.detailPanel {
+  margin-top: 0.9rem;
+  max-width: 60ch;
+  border: 1px solid var(--hm-border);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  background: #fff;
+}
+
+.detailTitle {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.detailBody {
+  margin: 0;
+  color: var(--hm-muted);
+  line-height: 1.55;
 }

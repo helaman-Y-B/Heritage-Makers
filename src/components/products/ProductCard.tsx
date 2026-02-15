@@ -6,6 +6,7 @@ import styles from "./ProductCard.module.css";
 import { Product } from "@/types/product";
 import ProductActions from "./ProductActions";
 import { useState } from "react";
+import { useCart } from "@/components/cart/CartProvider";
 
 type Props = {
   product: Product;
@@ -22,14 +23,33 @@ export default function ProductCard({
   canManageOwn,
   currentUserId,
 }: Props) {
-  let safeImgPath =
+  /**
+   * Normalizes image input so each product card always has a valid image path.
+   * If the stored path is empty or malformed, we fall back to a placeholder.
+   */
+  const safeImgPath =
     typeof product.img_path === "string" && product.img_path.trim()
       ? product.img_path.startsWith("/")
         ? product.img_path
         : `/${product.img_path}`
       : "/productsImg/placeHolder.png";
 
-      const [img, setImg] = useState(safeImgPath);
+  const [img, setImg] = useState(safeImgPath);
+  const { addItem } = useCart();
+
+  function handleAddToCart() {
+    /**
+     * Adds this product to the client-side cart.
+     * This is only available to users with `create_order` permission (buyers).
+     */
+    addItem({
+      productId: product.id,
+      name: product.product_name,
+      price: Number(product.price),
+      imgPath: safeImgPath,
+      makerName: `${product.firstname} ${product.lastname}`.trim(),
+    });
+  }
 
   return (
     <article className={styles.card}>
@@ -51,24 +71,28 @@ export default function ProductCard({
         </div>
 
         <p className={styles.muted}>
-          By <strong>{product.firstname}</strong> • {product.category}
+          By{" "}
+          <Link className={styles.makerLink} href={`/makers/${product.user_id}`}>
+            <strong>{product.firstname}</strong>
+          </Link>{" "}
+          | {product.category}
         </p>
 
         <p className={styles.muted}>
-          ★ {product.rating} ({product.reviewsCount})
-          {!product.inStock && " • Out of stock"}
+          Rating: {product.rating} ({product.reviewsCount})
+          {!product.inStock && " | Out of stock"}
         </p>
 
         <div className={styles.priceRow}>
           <span className={styles.price}>${product.price}</span>
           <Link className={styles.link} href={`/products/${product.id}`}>
-            View details →
+            View details -&gt;
           </Link>
         </div>
 
         {canCreateOrder ? (
-          <button className={styles.actionButton} type="button">
-            Add to order
+          <button className={styles.actionButton} type="button" onClick={handleAddToCart}>
+            Add to cart
           </button>
         ) : (
           <p className={styles.restricted}>Buyers can place orders</p>

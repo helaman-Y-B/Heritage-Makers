@@ -5,7 +5,7 @@ export default function CreateAccountPage() {
   return (
     <AuthShell
       title="Create your account"
-      subtitle="Join Heritage Makers to save favorites, manage orders, and more."
+      subtitle="Use Google to join Heritage Makers and start with a buyer account."
     >
       <CreateAccountForm />
     </AuthShell>

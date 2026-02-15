@@ -1,0 +1,146 @@
+.header {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1.5rem 0 1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.sub {
+  margin: 0;
+  color: var(--muted);
+}
+
+.empty {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.link {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.grid {
+  display: grid;
+  gap: 0.75rem;
+  padding-bottom: 2rem;
+}
+
+.row {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.meta {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 220px;
+}
+
+.name {
+  margin: 0;
+  font-weight: 800;
+}
+
+.muted {
+  margin: 0;
+  color: var(--muted);
+}
+
+.controls {
+  display: flex;
+  gap: 0.6rem;
+  align-items: end;
+}
+
+.qtyStepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.stepBtn {
+  width: 38px;
+  height: 36px;
+  border: 0;
+  background: #fff;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.stepBtn:hover {
+  background: var(--surface);
+}
+
+.qtyValue {
+  min-width: 34px;
+  text-align: center;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.remove {
+  border: 1px solid #f3c2bf;
+  color: #b42318;
+  background: #fff;
+  border-radius: 999px;
+  padding: 0.5rem 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.footer {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 1rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.05rem;
+}
+
+.footerButtons {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.primary {
+  background: var(--primary);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.55rem 1rem;
+  font-weight: 800;
+}
+
+.secondary {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.55rem 1rem;
+  font-weight: 800;
+  cursor: pointer;
+}

@@ -5,7 +5,7 @@ export default function LoginPage() {
   return (
     <AuthShell
       title="Welcome back"
-      subtitle="Sign in to manage your account and access member features."
+      subtitle="Sign in with Google to manage your account and access member features."
     >
       <LoginForm />
     </AuthShell>

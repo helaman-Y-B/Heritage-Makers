@@ -14,6 +14,10 @@ type Props = {
 const categories = ["Ceramics", "Woodwork", "Art", "Textiles", "Jewelry"] as const;
 
 export default function AddProductForm({ enabled }: Props) {
+  /**
+   * Renders the product creation form for admins and makers.
+   * The form is addressed by `#add-product` so the role tools can jump to it.
+   */
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -51,7 +55,7 @@ export default function AddProductForm({ enabled }: Props) {
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+    <form id="add-product" className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.row}>
         <label className={styles.label}>
           Name

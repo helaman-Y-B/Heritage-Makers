@@ -1,3 +1,4 @@
+// src/components/products/ProductCard.tsx
 "use client";
 
 import Image from "next/image";
@@ -5,7 +6,10 @@ import Link from "next/link";
 import styles from "./ProductCard.module.css";
 import { Product } from "@/types/product";
 import ProductActions from "./ProductActions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+/* SC: Added UI feedback for "Add to order" (useEffect + justAdded state) */
+
+import { addToCart } from "@/lib/cart"; // Import the addToCart function (SC)
 
 type Props = {
   product: Product;
@@ -13,6 +17,7 @@ type Props = {
   canManageAny: boolean;
   canManageOwn: boolean;
   currentUserId?: number;
+  userKey?: string; // SC: NEW - stable key (email preferred) for per-user cart
 };
 
 export default function ProductCard({
@@ -21,6 +26,7 @@ export default function ProductCard({
   canManageAny,
   canManageOwn,
   currentUserId,
+  userKey, // SC: NEW
 }: Props) {
   let safeImgPath =
     typeof product.img_path === "string" && product.img_path.trim()
@@ -29,7 +35,17 @@ export default function ProductCard({
         : `/${product.img_path}`
       : "/productsImg/placeHolder.png";
 
-      const [img, setImg] = useState(safeImgPath);
+  const [img, setImg] = useState(safeImgPath);
+
+  /* SC: Added local UI feedback state for "Add to order" button */
+  const [justAdded, setJustAdded] = useState(false);
+
+  useEffect(() => {
+    if (!justAdded) return;
+    const t = setTimeout(() => setJustAdded(false), 900);
+    return () => clearTimeout(t);
+  }, [justAdded]);
+  /* SC: End UI feedback state */
 
   return (
     <article className={styles.card}>
@@ -67,12 +83,38 @@ export default function ProductCard({
         </div>
 
         {canCreateOrder ? (
-          <button className={styles.actionButton} type="button">
-            Add to order
+          <button
+            className={styles.actionButton}
+            type="button"
+            /* SC: Ensure cart is saved per-user by using a stable key (email preferred). */
+            onClick={() => {
+              const effectiveUserKey =
+                userKey ?? (currentUserId ? String(currentUserId) : undefined); // SC: stable key preference
+
+              addToCart(
+                {
+                  id: String(product.id),
+                  name: product.product_name,
+                  price: Number(product.price),
+                  imageUrl: product.img_path,
+                },
+                1,
+                effectiveUserKey // SC: use effective per-user key
+              );
+              setJustAdded(true);
+            }}
+            /* SC: End per-user cart save */
+            style={{
+              transform: justAdded ? "scale(1.03)" : "scale(1)",
+              transition: "transform 120ms ease",
+            }}
+          >
+            {justAdded ? "Added!" : "Add to order"}
           </button>
         ) : (
           <p className={styles.restricted}>Buyers can place orders</p>
         )}
+        {/* SC: End click feedback */}
 
         <ProductActions
           product={product}
@@ -84,3 +126,4 @@ export default function ProductCard({
     </article>
   );
 }
+/* SC: End UI feedback for "Add to order" */

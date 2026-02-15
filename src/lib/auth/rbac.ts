@@ -4,6 +4,10 @@ export type User = {
   id: string;
   name: string;
   role: Role;
+
+  /* SC: Optional field used for OAuth-based stable cart key */
+  email?: string | null;
+  /* SC: end */
 };
 
 export const hasPermission = (role: Role, permission: Permission) =>

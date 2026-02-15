@@ -2,9 +2,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+/* SC: Added useEffect to persist/clear per-user cart key in localStorage */
 
 type Props = {
-  currentUser: { role: "admin" | "seller" | "buyer" } | null;
+  currentUser: { id: string; role: "admin" | "seller" | "buyer" } | null;
+  /* SC: Added id so cart can be scoped per user */
 };
 
 const ROLE_LABELS = {
@@ -16,8 +19,23 @@ const ROLE_LABELS = {
 export default function AuthStatus({ currentUser }: Props) {
   const router = useRouter();
 
+  /* SC: Persist per-user cart key so carts don't get shared across accounts */
+  useEffect(() => {
+    if (currentUser) {
+      localStorage.setItem("cartUserKey", currentUser.id);
+    } else {
+      localStorage.removeItem("cartUserKey");
+    }
+  }, [currentUser]);
+  /* SC: End per-user cart key */
+
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });
+
+    /* SC: Clear per-user cart key on logout */
+    localStorage.removeItem("cartUserKey");
+    /* SC: End clear per-user cart key */
+
     router.push("/login");
     router.refresh();
   }
@@ -78,3 +96,4 @@ export default function AuthStatus({ currentUser }: Props) {
     </div>
   );
 }
+/* SC: End localStorage user scoping for cart */

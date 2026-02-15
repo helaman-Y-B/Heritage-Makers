@@ -1,5 +1,7 @@
+// src/app/products/page.tsx
 import Container from "@/components/layout/Container";
 import ProductCard from "@/components/products/ProductCard";
+import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth/currentUser";
 import { userHasAnyPermission, userHasPermission } from "@/lib/auth/rbac";
 import getProducts from "@/models/getProducts";
@@ -14,6 +16,12 @@ export const metadata = {
 
 export default async function ProductsPage() {
   const currentUser = await getCurrentUser();
+
+  /* SC: stable userKey (email preferred) to keep cart consistent across Products/Orders */
+  const userKey =
+    (currentUser as any)?.email ?? (currentUser?.id ? String(currentUser.id) : undefined);
+  /* SC: end */
+
   const canCreateOrder = userHasPermission(currentUser, "create_order");
   const canManageProducts = userHasAnyPermission(currentUser, [
     "manage_products",
@@ -89,10 +97,11 @@ export default async function ProductsPage() {
               </button>
             )}
             {canViewOrders && (
-              <button className={styles.toolButton} type="button">
+              <Link href="/orders" className={styles.toolButton}>
                 View orders
-              </button>
+              </Link>
             )}
+
             {canViewEarnings && (
               <button className={styles.toolButton} type="button">
                 View earnings
@@ -123,18 +132,22 @@ export default async function ProductsPage() {
       </div>
 
       <section className={styles.grid}>
-        
         {products.map((p) => (
-          <ErrorBoundary fallback={<article className={styles.cardError}>Failed to load product.</article>}>
-          <ProductCard
+          /* SC: Added key to the top-level element returned by map to fix React key warning */
+          <ErrorBoundary
             key={`${p.id}-${p.firstname}`}
-            product={p}
-            canCreateOrder={canCreateOrder}
-            canManageAny={canManageAnyProducts}
-            canManageOwn={canManageOwnProducts}
-            currentUserId={currentUser ? Number(currentUser.id) : undefined}
-          />
+            fallback={<article className={styles.cardError}>Failed to load product.</article>}
+          >
+            <ProductCard
+              product={p}
+              canCreateOrder={canCreateOrder}
+              canManageAny={canManageAnyProducts}
+              canManageOwn={canManageOwnProducts}
+              currentUserId={undefined}
+              userKey={userKey} /* SC: pass stable key for per-user cart */
+            />
           </ErrorBoundary>
+          /* SC: End key fix */
         ))}
       </section>
     </Container>

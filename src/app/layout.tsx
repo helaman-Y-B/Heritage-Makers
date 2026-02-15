@@ -4,6 +4,8 @@ import Footer from "../components/layout/Footer";
 import { Nunito_Sans, Chivo } from "next/font/google";
 import "./globals.css";
 import Providers from "../components/auth/Providers";
+
+
   
 
 const nunito = Nunito_Sans({

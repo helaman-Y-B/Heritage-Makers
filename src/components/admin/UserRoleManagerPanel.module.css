@@ -1,0 +1,53 @@
+.tableWrap {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: auto;
+  background: #fff;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.table th {
+  background: var(--surface);
+  font-size: 0.85rem;
+}
+
+.role {
+  text-transform: capitalize;
+  font-weight: 700;
+}
+
+.deleteButton {
+  border: 1px solid #f1b0b7;
+  background: #fff6f7;
+  color: #b42318;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.deleteButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #b42318;
+  font-weight: 600;
+}
+
+.message {
+  color: var(--muted);
+}

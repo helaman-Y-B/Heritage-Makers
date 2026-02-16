@@ -89,11 +89,25 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       /**
        * Persists app user identity/role in JWT so server routes can authorize requests.
+       * On subsequent requests (no `user` object), we refresh role from DB so
+       * admin role changes take effect without requiring the user to recreate account.
        */
       if (user) {
         token.uid = (user as { id?: string }).id;
         token.role = (user as { role?: Role }).role;
         token.name = user.name;
+      } else if (typeof token.uid === "string" && token.uid) {
+        // Keep JWT role in sync with DB so role upgrades take effect without re-registering users.
+        const latest = await sql<{ role: string | null }>`
+          SELECT role
+          FROM users
+          WHERE user_id = ${Number.parseInt(token.uid, 10)}
+          LIMIT 1
+        `;
+        const latestRole = latest.rows[0]?.role;
+        if (latestRole) {
+          token.role = normalizeDbRole(latestRole);
+        }
       }
       return token;
     },

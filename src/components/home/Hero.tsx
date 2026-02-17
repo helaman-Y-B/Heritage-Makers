@@ -49,9 +49,6 @@ export default function Hero() {
         <Link className={styles.secondaryBtn} href="/makers">
           Meet the Makers
         </Link>
-        <Link className={styles.secondaryBtn} href="/become-a-maker">
-          Become a Maker
-        </Link>
       </div>
 
       <div className={styles.metaRow}>

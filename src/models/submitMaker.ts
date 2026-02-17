@@ -1,26 +1,39 @@
 import { sql } from "@vercel/postgres";
+import { ensureMakerApplicationsTable } from "@/lib/makerApplications";
 
 export default async function submitMaker(
-    /**
-     * Fuction responsable to submit the maker application to the database. 
-     * It checks if a maker with the same studio name already exists, and if not, 
-     * it inserts the new maker into the database.
-     */
-// Parameters for the maker application
+  /**
+   * Stores a new maker application in `pending` status.
+   * Admin review later decides approval/rejection and role promotion.
+   */
+  userId: number,
   studioName: string,
   craftType: string,
-  story:string,
+  story: string,
   shopLink?: string
 ) {
-    // Checks if maker already exists with the same studio name
-    const { rows } = await sql`SELECT * FROM makers WHERE studio_name = ${studioName}`;
-    if (rows.length > 0) {
-        throw new Error("Maker with this studio name already exists");
-    }
-    // Inserts the new maker into the database and returns the inserted record
-    const { rows: inserted } = await sql`
-        INSERT INTO makers (studio_name, craft_type, story, shop_link)
-        VALUES (${studioName}, ${craftType}, ${story}, ${shopLink})
-        RETURNING *`;
-    return inserted;
+  // Makes the flow resilient on fresh environments where migrations
+  // may not have been executed yet.
+  await ensureMakerApplicationsTable();
+
+  // One pending application per user keeps admin queues clean and avoids duplicates.
+  const duplicatePending = await sql`
+    SELECT application_id
+    FROM maker_applications
+    WHERE user_id = ${userId} AND status = ${"pending"}
+    LIMIT 1
+  `;
+
+  if (duplicatePending.rowCount && duplicatePending.rowCount > 0) {
+    throw new Error("You already have a pending maker application.");
+  }
+
+  // Application starts as pending; role updates happen only in admin approval route.
+  const inserted = await sql`
+    INSERT INTO maker_applications (user_id, studio_name, craft_type, story, shop_link, status)
+    VALUES (${userId}, ${studioName}, ${craftType}, ${story}, ${shopLink ?? null}, ${"pending"})
+    RETURNING application_id, status
+  `;
+
+  return inserted.rows[0];
 }

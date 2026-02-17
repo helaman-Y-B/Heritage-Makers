@@ -1,23 +1,25 @@
+// src/app/orders/page.tsx
 import Container from "@/components/layout/Container";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth/currentUser";
-import { userHasAnyPermission } from "@/lib/auth/rbac";
+import { userHasAnyPermission, userHasPermission } from "@/lib/auth/rbac";
+import OrdersClient from "./OrdersClient";
 
 export const metadata = {
   title: "Orders | Heritage Makers",
 };
 
 export default async function OrdersPage() {
-  /**
-   * Maker/admin orders screen (placeholder for now).
-   * This is scoped by role:
-   * - Maker: will eventually show orders that include the maker's products.
-   * - Admin: will eventually show all orders across the marketplace.
-   */
   const currentUser = await getCurrentUser();
-  const canViewOrders = userHasAnyPermission(currentUser, ["view_orders", "view_own_orders"]);
 
-  if (!canViewOrders) {
+  // Permisos "admin/maker" para dashboard de orders
+  const canViewOrdersDashboard = userHasAnyPermission(currentUser, ["view_orders"]);
+
+  // Permiso para que un buyer vea SU order/cart
+  const canUseCart = userHasPermission(currentUser, "create_order");
+
+  // Si no puede ver dashboard NI usar cart, entonces sí bloquea
+  if (!canViewOrdersDashboard && !canUseCart) {
     return (
       <Container>
         <h1>Orders</h1>
@@ -27,19 +29,20 @@ export default async function OrdersPage() {
     );
   }
 
+  // Per-user key para OrdersClient (email preferido)
+  const userKey =
+    (currentUser as any)?.email ?? (currentUser?.id ? String(currentUser.id) : undefined);
+
   return (
     <Container>
       <h1>Orders</h1>
-      <p>
-        Orders dashboard is coming next. This page is wired and permission-protected for{" "}
-        <strong>{currentUser?.role}</strong>.
-      </p>
-      <p>
-        {currentUser?.role === "seller"
-          ? "When we add real orders, you will only see orders for your products."
-          : "When we add real orders, you will see marketplace-wide orders."}
-      </p>
-      <Link href="/products">Back to products</Link>
+
+      {/* Buyer cart / per-user order */}
+      <OrdersClient userKey={userKey} />
+
+      <div style={{ marginTop: 16 }}>
+        <Link href="/products">Back to products</Link>
+      </div>
     </Container>
   );
 }

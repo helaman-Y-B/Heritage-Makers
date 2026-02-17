@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
-import { useCart } from "@/components/cart/CartProvider";
+import { useEffect } from "react";
+/* SC: Added useEffect to persist/clear per-user cart key in localStorage */
+
 
 type Props = {
-  currentUser: { role: "admin" | "seller" | "buyer" } | null;
+  currentUser: { id: string; role: "admin" | "seller" | "buyer" } | null;
+  /* SC: Added id so cart can be scoped per user */
 };
 
 const ROLE_LABELS = {
@@ -17,13 +19,25 @@ const ROLE_LABELS = {
 
 export default function AuthStatus({ currentUser }: Props) {
   const router = useRouter();
-  const { itemCount } = useCart();
+
+  /* SC: Persist per-user cart key so carts don't get shared across accounts */
+  useEffect(() => {
+    if (currentUser) {
+      localStorage.setItem("cartUserKey", currentUser.id);
+    } else {
+      localStorage.removeItem("cartUserKey");
+    }
+  }, [currentUser]);
+  /* SC: End per-user cart key */
 
   async function handleLogout() {
-    /**
-     * Uses NextAuth sign-out so Google/session cookies are cleared consistently.
-     */
-    await signOut({ callbackUrl: "/login" });
+    await fetch("/api/auth/logout", { method: "POST" });
+
+    /* SC: Clear per-user cart key on logout */
+    localStorage.removeItem("cartUserKey");
+    /* SC: End clear per-user cart key */
+
+    router.push("/login");
     router.refresh();
   }
 
@@ -59,8 +73,8 @@ export default function AuthStatus({ currentUser }: Props) {
             whiteSpace: "nowrap",
           }}
         >
-          Cart ({itemCount})
-        </Link>
+          Cart 
+        </Link> //SC
       ) : null}
       {currentUser ? (
         <button
@@ -100,3 +114,4 @@ export default function AuthStatus({ currentUser }: Props) {
     </div>
   );
 }
+/* SC: End localStorage user scoping for cart */

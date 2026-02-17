@@ -26,8 +26,14 @@ export default function Navigation() {
                 <Image id="nav-arrow" className={isOpen ? "rotated" : ""} src={navIcon} alt="Menu Icon" width={40} height={40} />
             ) : (null)}
             <Link className="nav-content" href="/products">Products</Link>
+
+            {/* SC: Added Orders link to access cart/order page from the main navigation */}
+            <Link href="/orders" className="nav-content">Orders</Link>
+            {/* SC: End Orders link */}
+
             <Link href="/aboutUs" className="nav-content">About</Link>
             <Link href="/contact" className="nav-content">Contact</Link>
+
         </nav>
         </>
     )

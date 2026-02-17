@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 /* SC: Added useEffect to persist/clear per-user cart key in localStorage */
 
+
 type Props = {
   currentUser: { id: string; role: "admin" | "seller" | "buyer" } | null;
   /* SC: Added id so cart can be scoped per user */
@@ -58,6 +59,23 @@ export default function AuthStatus({ currentUser }: Props) {
           Role: {ROLE_LABELS[currentUser.role]}
         </span>
       )}
+      {currentUser?.role === "buyer" ? (
+        <Link
+          href="/cart"
+          style={{
+            fontSize: "0.85rem",
+            fontWeight: 700,
+            color: "var(--hm-accent-700)",
+            border: "1px solid var(--border)",
+            padding: "0.3rem 0.7rem",
+            borderRadius: "999px",
+            background: "#fff",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Cart 
+        </Link> //SC
+      ) : null}
       {currentUser ? (
         <button
           onClick={handleLogout}

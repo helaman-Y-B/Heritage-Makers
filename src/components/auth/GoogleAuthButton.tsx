@@ -2,15 +2,28 @@
 "use client";
 
 import { signIn } from "next-auth/react";
+import { Role } from "@/lib/auth/roles";
 
-export default function GoogleAuthButton() {
+type Props = {
+  role: Role;
+  label: string;
+};
+
+export default function GoogleAuthButton({ role, label }: Props) {
+  /**
+   * Starts Google OAuth with a callback that applies the requested role.
+   * The server validates whether the signed-in email is allowed to use that role.
+   */
   return (
     <button
       type="button"
-      // === SC START ===
-      // SC: After Google auth, redirect to our route that sets the custom "hm_user" cookie.
-      onClick={() => signIn("google", { callbackUrl: "/api/auth/hm-sync" })}
-      // === SC END ===
+      onClick={() =>
+        signIn(
+          "google",
+          { callbackUrl: `/auth/role?as=${encodeURIComponent(role)}` },
+          { prompt: "select_account" },
+        )
+      }
       style={{
         width: "100%",
         padding: "10px 12px",
@@ -21,7 +34,7 @@ export default function GoogleAuthButton() {
         fontWeight: 600,
       }}
     >
-      Continue with Google
+      {label}
     </button>
   );
 }

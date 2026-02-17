@@ -15,27 +15,28 @@ export const metadata = {
 };
 
 export default async function ProductsPage() {
+  /**
+   * Builds the products view based on the current user's role.
+   * Sellers are scoped to their own products, while admins and buyers can see all products.
+   */
   const currentUser = await getCurrentUser();
 
-  /* SC: stable userKey (email preferred) to keep cart consistent across Products/Orders */
+  // Stable userKey (email preferred) to keep cart consistent across Products/Orders
   const userKey =
     (currentUser as any)?.email ?? (currentUser?.id ? String(currentUser.id) : undefined);
-  /* SC: end */
 
   const canCreateOrder = userHasPermission(currentUser, "create_order");
   const canManageProducts = userHasAnyPermission(currentUser, [
     "manage_products",
     "manage_own_products",
   ]);
-  const canViewOrders = userHasAnyPermission(currentUser, [
-    "view_orders",
-    "view_own_orders",
-  ]);
+  const canViewOrders = userHasAnyPermission(currentUser, ["view_orders", "view_own_orders"]);
   const canManageUsers = userHasPermission(currentUser, "manage_users");
   const canApproveMakers = userHasPermission(currentUser, "approve_makers");
   const canManageCategories = userHasPermission(currentUser, "manage_categories");
   const canViewReports = userHasPermission(currentUser, "view_reports");
   const canViewEarnings = userHasPermission(currentUser, "view_earnings");
+
   const showRoleTools =
     canManageProducts ||
     canViewOrders ||
@@ -44,12 +45,18 @@ export default async function ProductsPage() {
     canManageCategories ||
     canViewReports ||
     canViewEarnings;
+
   const canManageOwnProducts = userHasPermission(currentUser, "manage_own_products");
   const canManageAnyProducts = userHasPermission(currentUser, "manage_products");
 
   let products: Product[] = [];
   try {
-    products = (await getProducts()).map((p) => ({
+    const ownerUserId =
+      currentUser?.role === "seller" && currentUser?.id
+        ? Number.parseInt(String(currentUser.id), 10)
+        : undefined;
+
+    products = (await getProducts({ ownerUserId })).map((p) => ({
       ...p,
       isSustainable: Boolean(p.isSustainable),
     }));
@@ -75,27 +82,32 @@ export default async function ProductsPage() {
       <header className={styles.header}>
         <h1 className={styles.title}>Products</h1>
         <p className={styles.sub}>
-          Browse heritage-inspired handmade pieces from local makers.
+          {currentUser?.role === "seller"
+            ? "Manage your own handmade listings."
+            : "Browse heritage-inspired handmade pieces from local makers."}
         </p>
       </header>
 
       <AddProductForm enabled={canManageAnyProducts || canManageOwnProducts} />
 
-      {/* Week 4: UI-only "search" (not functional yet). We'll wire it in Week 4/5 */}
+      {/* UI-only "search" (not functional yet). */}
       <div className={styles.toolbar}>
         <input
           className={styles.input}
-          placeholder="Search products" // This is not working, we don't a search engine.
+          placeholder="Search products"
           aria-label="Search products"
         />
+
         {showRoleTools && (
           <div className={styles.roleTools}>
             <span className={styles.roleLabel}>Role tools</span>
+
             {canManageProducts && (
-              <button className={styles.toolButton} type="button">
+              <Link className={styles.toolButton} href="#add-product">
                 Add product
-              </button>
+              </Link>
             )}
+
             {canViewOrders && (
               <Link href="/orders" className={styles.toolButton}>
                 View orders
@@ -103,25 +115,29 @@ export default async function ProductsPage() {
             )}
 
             {canViewEarnings && (
-              <button className={styles.toolButton} type="button">
+              <Link className={styles.toolButton} href="/earnings">
                 View earnings
-              </button>
+              </Link>
             )}
+
             {canManageUsers && (
               <button className={styles.toolButton} type="button">
                 Manage users
               </button>
             )}
+
             {canApproveMakers && (
               <button className={styles.toolButton} type="button">
                 Approve makers
               </button>
             )}
+
             {canManageCategories && (
               <button className={styles.toolButton} type="button">
                 Manage categories
               </button>
             )}
+
             {canViewReports && (
               <button className={styles.toolButton} type="button">
                 View reports
@@ -133,9 +149,8 @@ export default async function ProductsPage() {
 
       <section className={styles.grid}>
         {products.map((p) => (
-          /* SC: Added key to the top-level element returned by map to fix React key warning */
           <ErrorBoundary
-            key={`${p.id}-${p.firstname}`}
+            key={`${p.id}`}
             fallback={<article className={styles.cardError}>Failed to load product.</article>}
           >
             <ProductCard
@@ -143,11 +158,10 @@ export default async function ProductsPage() {
               canCreateOrder={canCreateOrder}
               canManageAny={canManageAnyProducts}
               canManageOwn={canManageOwnProducts}
-              currentUserId={undefined}
-              userKey={userKey} /* SC: pass stable key for per-user cart */
+              currentUserId={currentUser?.id ? Number(currentUser.id) : undefined}
+              userKey={userKey}
             />
           </ErrorBoundary>
-          /* SC: End key fix */
         ))}
       </section>
     </Container>

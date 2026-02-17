@@ -2,6 +2,7 @@
 import Container from "@/components/layout/Container";
 import styles from "./page.module.css";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function BecomeAMakerPage() {
   /**
@@ -10,6 +11,7 @@ export default function BecomeAMakerPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -46,6 +48,8 @@ export default function BecomeAMakerPage() {
       // Success: reset form and show success message
       setSuccess(true);
       form.reset();
+      // Refresh so server components (header role badge, products permissions) update immediately.
+      router.refresh();
       // Clear success message after 5 seconds
       setTimeout(() => setSuccess(false), 5000);
     } catch (err) {

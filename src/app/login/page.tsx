@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import AuthShell from "@/components/auth/AuthShell";
 import LoginForm from "@/components/auth/LoginForm";
 
@@ -7,7 +8,9 @@ export default function LoginPage() {
       title="Welcome back"
       subtitle="Sign in with Google to manage your account and access member features."
     >
-      <LoginForm />
+      <Suspense fallback={<p>Loading login...</p>}>
+        <LoginForm />
+      </Suspense>
     </AuthShell>
   );
 }

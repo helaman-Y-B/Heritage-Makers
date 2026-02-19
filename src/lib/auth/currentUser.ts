@@ -5,12 +5,20 @@ import { cookies } from "next/headers";
 import { Role } from "./roles";
 import { isRoleAllowed } from "./activeRole";
 
+type CookieUser = {
+  id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  role: User["role"];
+};
+
 export async function getCurrentUser(): Promise<User | null> {
   /**
    * Reads the authenticated user from NextAuth session and returns
    * the normalized RBAC payload used throughout the app.
    */
-  const session = await getServerSession(authOptions);
+  /*const session = await getServerSession(authOptions);
   const sessionUser = session?.user;
   if (!sessionUser?.id || !sessionUser.role) return null;
 
@@ -19,11 +27,22 @@ export async function getCurrentUser(): Promise<User | null> {
   const role =
     requestedRole && isRoleAllowed(sessionUser.role, requestedRole)
       ? requestedRole
-      : sessionUser.role;
+      : sessionUser.role;*/
 
-  return {
-    id: sessionUser.id,
-    name: sessionUser.name ?? "Google User",
-    role,
-  };
+  const cookieStore = await cookies();
+  const raw = cookieStore.get("hm_user")?.value;
+  if (!raw) return null;
+
+  try {
+    const parsed = JSON.parse(raw) as CookieUser;
+    return {
+      id: String(parsed.id),
+      name: `${parsed.firstname} ${parsed.lastname}`.trim(),
+      role: parsed.role,
+    };
+  } catch {
+    return null;
+  }
 }
+
+

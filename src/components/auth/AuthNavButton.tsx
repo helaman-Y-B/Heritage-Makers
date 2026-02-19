@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function AuthNavButton() {
@@ -26,7 +27,8 @@ export default function AuthNavButton() {
   }
 
   async function handleLogout() {
-    // Single source of truth: our server logout clears hm_user + next-auth cookies
+    // End NextAuth session first, then clear app-specific cookies.
+    await signOut({ redirect: false }).catch(() => null);
     await fetch("/api/auth/logout", { method: "POST" }).catch(() => null);
     router.refresh();
     router.push("/login");

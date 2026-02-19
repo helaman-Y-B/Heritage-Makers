@@ -10,6 +10,12 @@ export async function POST() {
     path: "/",
     expires: new Date(0),
   });
+  res.cookies.set("hm_active_role", "", {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+    expires: new Date(0),
+  });
 
   // 2) Clear NextAuth cookies (JWT strategy)
   // Depending on http/https and env, NextAuth may use one or more of these names.

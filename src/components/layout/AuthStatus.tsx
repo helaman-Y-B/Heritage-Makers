@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { signOut } from "next-auth/react";
 /* SC: Added useEffect to persist/clear per-user cart key in localStorage */
 
 
@@ -31,6 +32,9 @@ export default function AuthStatus({ currentUser }: Props) {
   /* SC: End per-user cart key */
 
   async function handleLogout() {
+    // Use NextAuth signOut to reliably clear auth session cookies.
+    await signOut({ redirect: false });
+    // Clear app-specific cookies used outside NextAuth.
     await fetch("/api/auth/logout", { method: "POST" });
 
     /* SC: Clear per-user cart key on logout */

@@ -1,8 +1,8 @@
-import { Suspense } from "react";
+export const dynamic = "force-dynamic";
+
 import AuthShell from "@/components/auth/AuthShell";
 import LoginForm from "@/components/auth/LoginForm";
-
-export const dynamic = "force-dynamic";
+import { Suspense } from "react";
 
 export default function LoginPage() {
   return (
@@ -10,7 +10,7 @@ export default function LoginPage() {
       title="Welcome back"
       subtitle="Sign in with Google to manage your account and access member features."
     >
-      <Suspense fallback={<p>Loading login...</p>}>
+      <Suspense fallback={<div>Loading...</div>}>
         <LoginForm />
       </Suspense>
     </AuthShell>

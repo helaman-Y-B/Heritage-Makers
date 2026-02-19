@@ -121,15 +121,17 @@ export default async function ProductsPage() {
             )}
 
             {canManageUsers && (
-              <button className={styles.toolButton} type="button">
+              // Admin user-management screen (role changes + protected deletes).
+              <Link className={styles.toolButton} href="/admin/users">
                 Manage users
-              </button>
+              </Link>
             )}
 
             {canApproveMakers && (
-              <button className={styles.toolButton} type="button">
+              // Admin queue for approving/rejecting pending maker applications.
+              <Link className={styles.toolButton} href="/admin/maker-applications">
                 Approve makers
-              </button>
+              </Link>
             )}
 
             {canManageCategories && (

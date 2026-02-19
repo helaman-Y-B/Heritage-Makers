@@ -67,3 +67,15 @@
   cursor: pointer;
   justify-self: start;
 }
+
+.error {
+  margin: 0;
+  color: #b42318;
+  font-weight: 600;
+}
+
+.success {
+  margin: 0;
+  color: #0f766e;
+  font-weight: 600;
+}

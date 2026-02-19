@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 
 export default function BecomeAMakerPage() {
   /**
-   * Become a Maker form submission handler and webpage component.
+   * Applicant-facing form.
+   * Submitting this page creates a pending application for admin review.
    */
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -19,15 +20,13 @@ export default function BecomeAMakerPage() {
     setSuccess(false);
     setLoading(true);
 
-    // Gather form data into an object
-    // We need to do that since if we only use formData
-    // The code will run again and it will display the error component.
+    // Convert form fields into a plain object for JSON API submission.
     const form = e.currentTarget;
     const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
 
     try {
-      // Submit the form data to the API route
+      // API stores a pending application; it does not auto-promote role.
       const response = await fetch("/api/createMaker", {
         method: "POST",
         headers: {
@@ -45,10 +44,9 @@ export default function BecomeAMakerPage() {
         return;
       }
 
-      // Success: reset form and show success message
+      // Keep UX explicit that approval is manual by admins.
       setSuccess(true);
       form.reset();
-      // Refresh so server components (header role badge, products permissions) update immediately.
       router.refresh();
       // Clear success message after 5 seconds
       setTimeout(() => setSuccess(false), 5000);
@@ -103,7 +101,11 @@ export default function BecomeAMakerPage() {
           </label>
 
           {error && <p className={styles.error}>{error}</p>}
-          {success && <p className={styles.success}>Application submitted successfully! We'll review it and be in touch.</p>}
+          {success && (
+            <p className={styles.success}>
+              Application received. An admin will review and approve your maker access if successful.
+            </p>
+          )}
 
           <button className={styles.button} type="submit" disabled={loading}>
             {loading ? "Submitting..." : "Submit application"}

@@ -6,7 +6,10 @@ import { Suspense } from "react";
 
 export default function LoginPage() {
   return (
-    <AuthShell title="Welcome back" subtitle="Sign in with Google to manage your account and access member features.">
+    <AuthShell
+      title="Welcome back"
+      subtitle="Sign in with Google to manage your account and access member features."
+    >
       <Suspense fallback={<div>Loading...</div>}>
         <LoginForm />
       </Suspense>
